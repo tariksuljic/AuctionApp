@@ -1,0 +1,102 @@
+$font-family-lato: "Lato", sans-serif;
+
+// headings
+h1 {
+  font-family: $font-family-lato;
+  font-size: 96px;
+  font-weight: 700;
+  line-height: 112px;
+}
+
+h2 {
+  font-family: $font-family-lato;
+  font-size: 60px;
+  font-weight: 700;
+  line-height: 80px;
+}
+
+h3 {
+  font-family: $font-family-lato;
+  font-size: 48px;
+  font-weight: 600;
+  line-height: 56px;
+}
+
+h4 {
+  font-family: $font-family-lato;
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 32px;
+}
+
+h5 {
+  font-family: $font-family-lato;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 36px;
+}
+
+h6 {
+  font-family: $font-family-lato;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 32px;
+}
+
+// body text styles
+.body-regular {
+  font-family: $font-family-lato;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+}
+
+.body-medium {
+  font-family: $font-family-lato;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+}
+
+.body-semibold {
+  font-family: $font-family-lato;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+.body-bold {
+  font-family: $font-family-lato;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 24px;
+}
+
+// body small text styles
+.body-small-regular {
+  font-family: $font-family-lato;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 24px;
+}
+
+.body-small-medium {
+  font-family: $font-family-lato;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 24px;
+}
+
+.body-small-semibold {
+  font-family: $font-family-lato;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+.body-small-bold {
+  font-family: $font-family-lato;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 24px;
+}

@@ -1,0 +1,26 @@
+@import "src/scss/index.scss";
+
+.breadcrumbs {
+  @include flex-row;
+  justify-content: space-between;
+  padding: 20px 0 30px 0;
+
+  .breadcrumbs-left {
+    color: $neutral00;
+  }
+
+  .breadcrumbs-right {
+    color: $primary;
+
+    a {
+      cursor: pointer;
+      color: $neutral05;
+    }
+
+    img {
+      width: 9.44px;
+      height: 8.67px;
+      margin: 0 16px;
+    }
+  }
+}

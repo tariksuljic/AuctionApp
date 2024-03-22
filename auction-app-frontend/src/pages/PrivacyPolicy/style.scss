@@ -1,0 +1,21 @@
+@import "src/scss/index.scss";
+
+.privacy-policy {
+  @include flex-column;
+  width: 556px;
+  gap: 32px;
+  margin: auto;
+
+  .text-container {
+    @include flex-column;
+    gap: 32px;
+
+    .body-semibold {
+      color: $neutral00;
+    }
+
+    .body-regular {
+      color: $neutral05;
+    }
+  }
+}

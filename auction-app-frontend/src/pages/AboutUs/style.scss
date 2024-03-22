@@ -1,0 +1,50 @@
+@import "src/scss/index.scss";
+
+.about-us {
+  @include flex-column;
+  gap: 32px;
+
+  .about-us-header {
+    width: 100%;
+
+    h5 {
+      text-align: left;
+      color: $neutral00;
+    }
+  }
+
+  .about-us-content {
+    display: flex;
+    width: 100%;
+    gap: 32px;
+
+    .about-us-text {
+      width: 543px;
+
+      p {
+        margin-bottom: 20px;
+        color: $neutral05;
+      }
+    }
+
+    .about-us-images {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr); // 2 columns with equal width
+      grid-template-rows: auto auto;
+      width: 548px;
+      height: 604px;
+      gap: 24px;
+
+      img {
+        width: 262px;
+        height: 199px;
+      }
+
+      img:first-child {
+        grid-column: 1 / -1; // making first image span both columns
+        height: 381px;
+        width: 548px;
+      }
+    }
+  }
+}
