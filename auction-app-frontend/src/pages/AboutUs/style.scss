@@ -1,7 +1,7 @@
 @import "src/scss/index.scss";
 
 .about-us {
-  @include flex-column;
+  @include flex-container(column);
   gap: 32px;
 
   .about-us-header {

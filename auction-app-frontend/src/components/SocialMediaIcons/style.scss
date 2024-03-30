@@ -1,7 +1,7 @@
 @import "src/scss/index.scss";
 
 .social-media-icons {
-  display: flex;
+  @include flex-container(row, center, center);
   gap: 16px;
 
   img {

@@ -1,12 +1,10 @@
 @import "src/scss/index.scss";
 
 .navbar {
+  @include flex-container(row, space-between, center);
   height: 73px;
   background-color: $white;
   width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   padding: 0 179px;
 
   img {
@@ -15,7 +13,7 @@
   }
 
   .navbar-items {
-    display: flex;
+    @include flex-container(row, center, center);
     gap: 30px;
 
     .navbar-item {

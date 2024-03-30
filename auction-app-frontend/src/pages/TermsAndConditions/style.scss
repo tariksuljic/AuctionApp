@@ -1,13 +1,13 @@
 @import "src/scss/index.scss";
 
 .terms-and-conditions {
-  @include flex-column;
+  @include flex-container(column);
   width: 556px;
   gap: 24px;
   margin: auto;
 
   .text-container {
-    @include flex-column;
+    @include flex-container(column);
     gap: 24px;
 
     .body-semibold {

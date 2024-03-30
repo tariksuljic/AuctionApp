@@ -1,0 +1,23 @@
+@import "src/scss/index.scss";
+
+.btn {
+  @include flex-container(row, center, center);
+  width: fit-content;
+  background-color: transparent;
+  border: 3px solid $primary;
+  color: $neutral00;
+  padding: 8px 16px;
+  gap: 8px;
+  cursor: pointer;
+
+  &.disabled {
+    border-color: $neutral09;
+    cursor: not-allowed;
+  }
+
+  &.filled {
+    background-color: $primary;
+    border-color: $primary;
+    color: $white;
+  }
+}

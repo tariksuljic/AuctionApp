@@ -1,23 +1,20 @@
 @import "src/scss/index.scss";
 
 .header {
+  @include flex-container(row, space-between, center);
   height: 40px;
   width: 100%;
   background-color: $neutral00;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   padding: 0 179px;
 
   .user-status {
-    display: flex;
+    @include flex-container(row, center, center);
     color: $white;
     gap: 24px;
 
     .user-status-links {
-      display: flex;
+      @include flex-container(row, center, center);
       gap: 24px;
-      align-items: center;
 
       span {
         color: $neutral05;

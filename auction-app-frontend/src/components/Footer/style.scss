@@ -10,7 +10,7 @@
   margin-top: 70px;
 
   .footer-column {
-    @include flex-column;
+    @include flex-container(column, flex-start, flex-start);
     gap: 24px;
 
     .column-heading {
@@ -20,7 +20,7 @@
     }
 
     .column-content {
-      @include flex-column;
+      @include flex-container(column, flex-start, flex-start);
       color: $neutral09;
       gap: 12px;
 

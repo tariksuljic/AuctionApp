@@ -1,5 +1,6 @@
 import { createContext, useState, useContext, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+
 import { ROUTES_MAP, HIDE_BREADCRUMBS_ON_PATHS } from "src/constants";
 
 const BreadcrumbContext = createContext();
@@ -9,7 +10,9 @@ export const useBreadcrumb = () => useContext(BreadcrumbContext);
 export const BreadcrumbProvider = ({ children }) => {
   const [title, setTitle] = useState("");
   const [breadcrumbs, setBreadcrumbs] = useState([]);
+
   const location = useLocation();
+
   const hideBreadcrumbs = HIDE_BREADCRUMBS_ON_PATHS.includes(location.pathname); // Hide breadcrumbs on certain paths
 
   const updateBreadcrumb = (location, title) => {

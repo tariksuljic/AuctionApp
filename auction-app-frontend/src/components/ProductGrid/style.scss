@@ -1,0 +1,10 @@
+@import "src/scss/index.scss";
+
+.product-grid {
+  overflow-y: auto;
+  height: 90vh;
+  min-height: 600px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 32px;
+}

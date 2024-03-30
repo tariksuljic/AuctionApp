@@ -1,7 +1,7 @@
 @import "src/scss/index.scss";
 
 .breadcrumbs {
-  @include flex-row;
+  @include flex-container(row);
   justify-content: space-between;
   padding: 20px 0 30px 0;
 
