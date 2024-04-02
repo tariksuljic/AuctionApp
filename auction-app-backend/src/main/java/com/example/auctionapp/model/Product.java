@@ -1,11 +1,9 @@
 package com.example.auctionapp.model;
 
-import com.example.auctionapp.entity.CategoryEntity;
-import com.example.auctionapp.entity.ProductEntity;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
+import java.util.List;
 
 public class Product {
 
@@ -15,9 +13,9 @@ public class Product {
     private BigDecimal startPrice;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    private String imageUrl;
     private String status;
     private UUID categoryId;
+    List<ProductImage> productImages;
 
     public Product() {
     }
@@ -70,14 +68,6 @@ public class Product {
         this.endDate = endDate;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(final String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
     public String getStatus() {
         return status;
     }
@@ -92,5 +82,13 @@ public class Product {
 
     public void setCategoryId(final UUID categoryId) {
         this.categoryId = categoryId;
+    }
+
+    public List<ProductImage> getProductImages() {
+        return productImages;
+    }
+
+    public void setProductImages(final List<ProductImage> productImages) {
+        this.productImages = productImages;
     }
 }

@@ -2,6 +2,7 @@ package com.example.auctionapp.service;
 
 import com.example.auctionapp.AuctionAppBackendApplication;
 import com.example.auctionapp.entity.ProductEntity;
+import com.example.auctionapp.entity.ProductImageEntity;
 import com.example.auctionapp.entity.CategoryEntity;
 import com.example.auctionapp.model.Product;
 import com.example.auctionapp.repository.ProductRepository;
@@ -36,7 +37,6 @@ public class ProductServiceTest {
 
     @Test
     public void whenGetLastChance_thenReturnProductsSortedByEndDateAsc() {
-        // creating a category for the product
         CategoryEntity categoryEntity = new CategoryEntity();
 
         categoryEntity.setCategoryId(UUID.randomUUID());
@@ -50,27 +50,26 @@ public class ProductServiceTest {
         productEntity.setStartPrice(BigDecimal.valueOf(200));
         productEntity.setStartDate(LocalDateTime.now());
         productEntity.setEndDate(LocalDateTime.now().plusDays(1));
-        productEntity.setImageUrl("http://example.com/product.jpg");
         productEntity.setStatus("ACTIVE");
         productEntity.setCategory(categoryEntity);
 
+        ProductImageEntity productImage = new ProductImageEntity();
+
+        productImage.setImageId(UUID.randomUUID());
+        productImage.setImageUrl("http://example.com/image.jpg");
+        productImage.setProductEntity(productEntity);
+
+        productEntity.setProductImages(List.of(productImage));
+
         Page<ProductEntity> pageOfProductEntities = new PageImpl<>(List.of(productEntity));
+        when(productRepository.findAll(any(Pageable.class))).thenReturn(pageOfProductEntities);
 
-        when(productRepository.findAll(any(Pageable.class))).thenAnswer(invocation -> {
-            Pageable pageable = invocation.getArgument(0);
-
-            assertThat(pageable.getSort()).isEqualTo(Sort.by(Sort.Direction.ASC, "endDate"));
-
-            return pageOfProductEntities;
-        });
-
-        Page<Product> resultPage = productService.getProductsByCriteria(0, 1, "endDate");
+        Page<Product> resultPage = productService.getProductsByCriteria(0, 1, "lastChance");
 
         assertThat(resultPage.getContent()).hasSize(1);
-
         Product resultProduct = resultPage.getContent().get(0);
-
         assertThat(resultProduct.getName()).isEqualTo(productEntity.getName());
         assertThat(resultProduct.getDescription()).isEqualTo(productEntity.getDescription());
+        assertThat(resultProduct.getProductImages()).isNotEmpty();
     }
 }

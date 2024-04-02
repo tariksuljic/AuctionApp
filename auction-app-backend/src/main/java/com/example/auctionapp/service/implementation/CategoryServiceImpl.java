@@ -6,9 +6,6 @@ import com.example.auctionapp.model.Category;
 import com.example.auctionapp.exceptions.repository.ResourceNotFoundException;
 import com.example.auctionapp.repository.CategoryRepository;
 import com.example.auctionapp.service.CategoryService;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,7 +17,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
 
-    public CategoryServiceImpl(CategoryRepository categoryRepository) {
+    public CategoryServiceImpl(final CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
     }
 
@@ -33,16 +30,16 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category getCategoryById(UUID id) {
-        CategoryEntity categoryEntity = this.categoryRepository.findById(id)
+    public Category getCategoryById(final UUID id) {
+        final CategoryEntity categoryEntity = this.categoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Category with the given ID does not exist"));
 
         return categoryEntity.toDomainModel();
     }
 
     @Override
-    public Category addCategory(CategoryAddRequest categoryRequest) {
-        CategoryEntity categoryEntity = categoryRequest.toEntity();
+    public Category addCategory(final CategoryAddRequest categoryRequest) {
+        final CategoryEntity categoryEntity = categoryRequest.toEntity();
 
         if (categoryRequest.getParentCategoryId() != null) {
             CategoryEntity parentCategoryEntity = this.categoryRepository.findById(categoryRequest.getParentCategoryId())
@@ -55,8 +52,8 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category updateCategory(UUID id, CategoryAddRequest categoryRequest) {
-        CategoryEntity existingCategoryEntity = this.categoryRepository.findById(id)
+    public Category updateCategory(final UUID id, final CategoryAddRequest categoryRequest) {
+        final CategoryEntity existingCategoryEntity = this.categoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Category with the given ID does not exist"));
 
         existingCategoryEntity.setName(categoryRequest.getName());
@@ -65,8 +62,8 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void deleteCategory(UUID id) {
-        CategoryEntity categoryEntity = this.categoryRepository.findById(id)
+    public void deleteCategory(final UUID id) {
+        final CategoryEntity categoryEntity = this.categoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
 
         this.categoryRepository.delete(categoryEntity);

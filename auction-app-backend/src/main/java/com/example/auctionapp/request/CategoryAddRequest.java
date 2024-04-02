@@ -20,7 +20,7 @@ public class CategoryAddRequest {
         return categoryEntity;
     }
 
-    public CategoryAddRequest(String name, UUID parentCategoryId) {
+    public CategoryAddRequest(final String name, final UUID parentCategoryId) {
         this.name = name;
         this.parentCategoryId = parentCategoryId;
     }
@@ -29,7 +29,7 @@ public class CategoryAddRequest {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -37,7 +37,7 @@ public class CategoryAddRequest {
         return parentCategoryId;
     }
 
-    public void setParentCategoryId(UUID parentCategoryId) {
+    public void setParentCategoryId(final UUID parentCategoryId) {
         this.parentCategoryId = parentCategoryId;
     }
 }

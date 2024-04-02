@@ -1,6 +1,9 @@
 package com.example.auctionapp.entity;
 
 import com.example.auctionapp.model.Product;
+import com.example.auctionapp.entity.CategoryEntity;
+import com.example.auctionapp.entity.ProductImageEntity;
+import com.example.auctionapp.model.ProductImage;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -8,6 +11,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -15,7 +19,10 @@ import org.hibernate.annotations.GenericGenerator;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
+
+import static java.util.stream.Collectors.toList;
 
 @Entity
 @Table(name = "product", schema="auction_app")
@@ -44,15 +51,15 @@ public class ProductEntity {
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime endDate;
 
-    @Column(name = "image_url")
-    private String imageUrl;
-
     @Column(name = "status")
     private String status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private CategoryEntity categoryEntity;
+
+    @OneToMany(mappedBy = "productEntity", fetch = FetchType.LAZY)
+    private List<ProductImageEntity> productImages;
 
     public ProductEntity() {
     }
@@ -63,7 +70,6 @@ public class ProductEntity {
                          final BigDecimal startPrice,
                          final LocalDateTime startDate,
                          final LocalDateTime endDate,
-                         final String imageUrl,
                          final String status,
                          final CategoryEntity categoryEntity) {
         this.productId = productId;
@@ -72,7 +78,6 @@ public class ProductEntity {
         this.startPrice = startPrice;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.imageUrl = imageUrl;
         this.status = status;
         this.categoryEntity = categoryEntity;
     }
@@ -86,9 +91,12 @@ public class ProductEntity {
         product.setStartPrice(this.startPrice);
         product.setStartDate(this.startDate);
         product.setEndDate(this.endDate);
-        product.setImageUrl(this.imageUrl);
         product.setStatus(this.status);
         product.setCategoryId(this.categoryEntity.getCategoryId());
+        List<ProductImage> productImageList = this.productImages.stream()
+                .map(ProductImageEntity::toDomainModel)
+                .collect(toList());
+        product.setProductImages(productImageList);
 
         return product;
     }
@@ -141,14 +149,6 @@ public class ProductEntity {
         this.endDate = endDate;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(final String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
     public String getStatus() {
         return status;
     }
@@ -163,5 +163,13 @@ public class ProductEntity {
 
     public void setCategory(final CategoryEntity categoryEntity) {
         this.categoryEntity = categoryEntity;
+    }
+
+    public List<ProductImageEntity> getProductImages() {
+        return productImages;
+    }
+
+    public void setProductImages(final List<ProductImageEntity> productImages) {
+        this.productImages = productImages;
     }
 }

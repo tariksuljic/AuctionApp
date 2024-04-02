@@ -10,18 +10,20 @@
     h5 {
       text-align: left;
       color: $neutral00;
+      margin: 30px 0 10px 0;
     }
   }
 
   .about-us-content {
-    display: flex;
+    @include flex-container(row, space-between, flex-start);
     width: 100%;
     gap: 32px;
 
     .about-us-text {
-      width: 543px;
+      min-width: 543px;
 
       p {
+        margin-top: 0;
         margin-bottom: 20px;
         color: $neutral05;
       }

@@ -4,6 +4,7 @@ import com.example.auctionapp.entity.ProductEntity;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
+import java.util.List;
 
 public class ProductAddRequest {
 
@@ -12,9 +13,9 @@ public class ProductAddRequest {
     private BigDecimal startPrice;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    private String imageUrl;
     private String status;
     private UUID categoryId;
+    private List<String> imageUrls;
 
     public ProductAddRequest() {
     }
@@ -27,10 +28,11 @@ public class ProductAddRequest {
         productEntity.setStartPrice(this.startPrice);
         productEntity.setStartDate(this.startDate);
         productEntity.setEndDate(this.endDate);
-        productEntity.setImageUrl(this.imageUrl);
         productEntity.setStatus(this.status);
 
         // category id is set in services
+        // same as the logic for image associated with the products
+
         return productEntity;
     }
 
@@ -38,7 +40,7 @@ public class ProductAddRequest {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -46,7 +48,7 @@ public class ProductAddRequest {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
@@ -54,7 +56,7 @@ public class ProductAddRequest {
         return startPrice;
     }
 
-    public void setStartPrice(BigDecimal startPrice) {
+    public void setStartPrice(final BigDecimal startPrice) {
         this.startPrice = startPrice;
     }
 
@@ -62,7 +64,7 @@ public class ProductAddRequest {
         return startDate;
     }
 
-    public void setStartDate(LocalDateTime startDate) {
+    public void setStartDate(final LocalDateTime startDate) {
         this.startDate = startDate;
     }
 
@@ -70,23 +72,15 @@ public class ProductAddRequest {
         return endDate;
     }
 
-    public void setEndDate(LocalDateTime endDate) {
+    public void setEndDate(final LocalDateTime endDate) {
         this.endDate = endDate;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
     }
 
     public String getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(final String status) {
         this.status = status;
     }
 
@@ -94,7 +88,15 @@ public class ProductAddRequest {
         return categoryId;
     }
 
-    public void setCategoryId(UUID categoryId) {
+    public void setCategoryId(final UUID categoryId) {
         this.categoryId = categoryId;
+    }
+
+    public List<String> getImageUrls() {
+        return imageUrls;
+    }
+
+    public void setImageUrls(final List<String> imageUrls) {
+        this.imageUrls = imageUrls;
     }
 }

@@ -35,6 +35,7 @@ export const ROUTE_PATHS = {
   ABOUT_US: "/about-us",
   PRIVACY_POLICY: "/privacy-policy",
   TERMS_AND_CONDITIONS: "/terms-and-conditions",
+  SHOP: "/shop",
 };
 
 export const HIDE_BREADCRUMBS_ON_PATHS = [
@@ -42,5 +43,9 @@ export const HIDE_BREADCRUMBS_ON_PATHS = [
   // will add more routes when needed
 ];
 
-export const NEW_ARRIVALS = "newArrivals";
-export const LAST_CHANCE = "lastChance";
+export const HOME_TABS = [
+  { id: "newArrivals", label: "New Arrivals" },
+  { id: "lastChance", label: "Last Chance" },
+];
+
+export const PRODUCT_DETAILS_TABS = [{ id: "details", label: "Details" }];

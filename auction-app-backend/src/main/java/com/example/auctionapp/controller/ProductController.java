@@ -24,42 +24,42 @@ public class ProductController {
 
     private final ProductService productService;
 
-    public ProductController(ProductService productService) {
+    public ProductController(final ProductService productService) {
         this.productService = productService;
     }
 
     @GetMapping
     public Page<Product> getProducts(
-            @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "8") int size) {
+            @RequestParam(value = "page", defaultValue = "0") final int page,
+            @RequestParam(value = "size", defaultValue = "8") final int size) {
         return this.productService.getProducts(page, size);
     }
 
     @PostMapping
-    public Product addProduct(@RequestBody ProductAddRequest product) {
+    public Product addProduct(@RequestBody final ProductAddRequest product) {
         return this.productService.addProduct(product);
     }
 
     @GetMapping(path = "/{id}")
-    public Product getProductById(@PathVariable UUID id) {
+    public Product getProductById(@PathVariable final UUID id) {
         return this.productService.getProductById(id);
     }
 
     @PutMapping(path = "/{id}")
-    public Product updateProduct(@PathVariable UUID id, @RequestBody ProductAddRequest product) {
+    public Product updateProduct(@PathVariable final UUID id, @RequestBody final ProductAddRequest product) {
         return this.productService.updateProduct(id, product);
     }
 
     @DeleteMapping(path = "/{id}")
-    public void deleteProduct(@PathVariable UUID id) {
+    public void deleteProduct(@PathVariable final UUID id) {
         this.productService.deleteProduct(id);
     }
 
     @GetMapping("/criteria")
     public Page<Product> getProductsByCriteria(
-            @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "8") int size,
-            @RequestParam(value = "type", defaultValue = "newArrivals") String type) {
+            @RequestParam(value = "page", defaultValue = "0") final int page,
+            @RequestParam(value = "size", defaultValue = "8") final int size,
+            @RequestParam(value = "type", defaultValue = "newArrivals") final String type) {
         return productService.getProductsByCriteria(page, size, type);
     }
 

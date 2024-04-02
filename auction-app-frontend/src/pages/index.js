@@ -4,3 +4,4 @@ export { default as PrivacyPolicy } from "./PrivacyPolicy/PrivacyPolicy";
 export { default as Home } from "./Home/Home";
 export { default as Shop } from "./Shop/Shop";
 export { default as MyAccount } from "./MyAccount/MyAccount";
+export { default as ProductDetails } from "./ProductDetails/ProductDetails";

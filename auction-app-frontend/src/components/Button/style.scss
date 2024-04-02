@@ -8,7 +8,13 @@
   color: $neutral00;
   padding: 8px 16px;
   gap: 8px;
+  transition: background-color 0.3s, color 0.3s;
   cursor: pointer;
+
+  &:hover {
+    background-color: $primary;
+    color: $white;
+  }
 
   &.disabled {
     border-color: $neutral09;

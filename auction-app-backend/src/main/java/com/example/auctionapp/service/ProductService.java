@@ -9,11 +9,11 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ProductService {
-    Page<Product> getProducts(int page, int size);
-    Product getProductById(UUID id);
-    Product addProduct(ProductAddRequest productRequest);
-    Product updateProduct(UUID id, ProductAddRequest productRequest);
-    void deleteProduct(UUID id);
-    Page<Product> getProductsByCriteria(int page, int size, String type);
+    Page<Product> getProducts(final int page, final int size);
+    Product getProductById(final UUID id);
+    Product addProduct(final ProductAddRequest productRequest);
+    Product updateProduct(final UUID id, final ProductAddRequest productRequest);
+    void deleteProduct(final UUID id);
+    Page<Product> getProductsByCriteria(final int page, final int size, final String type);
     Product getRandomProduct();
 }

@@ -48,9 +48,9 @@ const AboutUs = () => {
           </p>
         </div>
         <div className="about-us-images">
-          <img src={aboutUs1} alt="Description" />
-          <img src={aboutUs2} alt="Description" />
-          <img src={aboutUs3} alt="Description" />
+          <img src={ aboutUs1 } alt="Description" />
+          <img src={ aboutUs2 } alt="Description" />
+          <img src={ aboutUs3 } alt="Description" />
         </div>
       </div>
     </div>

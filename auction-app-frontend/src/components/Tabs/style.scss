@@ -1,0 +1,29 @@
+@import "src/scss/index.scss";
+
+.tabs {
+  @include flex-container(row, flex-start, center);
+  position: relative;
+  gap: 64px;
+  margin: 30px 0;
+  border-bottom: 1px solid $neutral09;
+  width: 100%;
+
+  .tab {
+    font-family: $font-family-lato;
+    text-align: left;
+    cursor: pointer;
+    padding-bottom: 10px;
+    min-width: 100px;
+    text-align: center;
+
+    &.active {
+      color: $primary;
+      border-bottom: 3px solid $primary;
+    }
+
+    &.inactive {
+      color: $neutral00;
+      border-bottom: 3px solid transparent;
+    }
+  }
+}

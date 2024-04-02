@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 
 import { NAV_ITEMS } from "src/constants";
 import { logo } from "src/assets/images";
@@ -9,20 +9,22 @@ const Navbar = () => {
   return (
     <div className="navbar">
       <div className="app-logo">
-        <img src={logo} alt="Auction App Logo" />
+        <Link to="/">
+          <img src={ logo } alt="Auction App Logo" />
+        </Link>
       </div>
       <div className="navbar-items body-regular">
-        {NAV_ITEMS.map((item) => (
+        { NAV_ITEMS.map((item) => (
           <NavLink
-            to={item.link}
-            className={({ isActive }) =>
+            to={ item.link }
+            className={ ({ isActive }) =>
               isActive ? "navbar-item active" : "navbar-item"
             }
-            key={item.key}
+            key={ item.key }
           >
-            {item.label}
+            { item.label }
           </NavLink>
-        ))}
+        )) }
       </div>
     </div>
   );

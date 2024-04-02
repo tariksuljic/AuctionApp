@@ -8,13 +8,13 @@ const SocialMediaIcons = () => {
   return (
     <div className="social-media-icons">
       <Link to="https://www.facebook.com/">
-        <img src={facebook} alt="facebook" />
+        <img src={ facebook } alt="facebook" />
       </Link>
       <Link to="https://www.instagram.com/">
-        <img src={instagram} alt="instagram" />
+        <img src={ instagram } alt="instagram" />
       </Link>
       <Link to="https://www.twitter.com/">
-        <img src={twitter} alt="twitter" />
+        <img src={ twitter } alt="twitter" />
       </Link>
     </div>
   );

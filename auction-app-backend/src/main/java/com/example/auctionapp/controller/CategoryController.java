@@ -23,7 +23,7 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-    public CategoryController(CategoryService categoryService) {
+    public CategoryController(final CategoryService categoryService) {
         this.categoryService = categoryService;
     }
 
@@ -38,22 +38,22 @@ public class CategoryController {
     }
 
     @PostMapping
-    public Category addCategory(@RequestBody CategoryAddRequest category) {
+    public Category addCategory(@RequestBody final CategoryAddRequest category) {
         return this.categoryService.addCategory(category);
     }
 
     @GetMapping(path = "/{id}")
-    public Category getCategoryById(@PathVariable UUID id) {
+    public Category getCategoryById(@PathVariable final UUID id) {
         return this.categoryService.getCategoryById(id);
     }
 
     @PutMapping(path = "/{id}")
-    public Category updateCategory(@PathVariable UUID id, @RequestBody CategoryAddRequest category) {
+    public Category updateCategory(@PathVariable final UUID id, @RequestBody final CategoryAddRequest category) {
         return this.categoryService.updateCategory(id, category);
     }
 
     @DeleteMapping(path = "/{id}")
-    public void deleteCategory(@PathVariable UUID id) {
+    public void deleteCategory(@PathVariable final UUID id) {
         this.categoryService.deleteCategory(id);
     }
 }
