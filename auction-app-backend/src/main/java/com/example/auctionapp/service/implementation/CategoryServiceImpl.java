@@ -14,7 +14,6 @@ import static java.util.stream.Collectors.toList;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
-
     private final CategoryRepository categoryRepository;
 
     public CategoryServiceImpl(final CategoryRepository categoryRepository) {
@@ -67,6 +66,14 @@ public class CategoryServiceImpl implements CategoryService {
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
 
         this.categoryRepository.delete(categoryEntity);
+    }
+
+    public List<Category> getCategoriesWithSubcategories() {
+        List<CategoryEntity> topLevelCategories = categoryRepository.findByParentCategoryIsNull();
+
+        return topLevelCategories.stream()
+                .map(CategoryEntity::toDomainModel)
+                .collect(toList());
     }
 
     @Override

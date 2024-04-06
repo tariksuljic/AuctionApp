@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import useInfiniteScroll from "react-infinite-scroll-hook";
 
 import {
   ProductGrid,
@@ -10,14 +11,14 @@ import {
 } from "src/components";
 
 import {
-  getProductsPaginated,
+  getProductsByCriteria,
   getProductRandom,
   getTopLevelCategories,
 } from "src/services";
 
 import { go } from "src/assets/icons";
 
-import { HOME_TABS, ROUTE_PATHS } from "src/constants";
+import { HOME_TABS, ROUTE_PATHS, HOME_DEFAULT_PAGE_NUMBER } from "src/constants";
 
 import "./style.scss";
 
@@ -28,37 +29,43 @@ const Home = () => {
   const [hasMore, setHasMore] = useState(true);
   const [product, setProduct] = useState(null);
   const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [initialDataLoading, setInitialDataLoading] = useState(true);
+  const [initialDataError, setInitialDataError] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   // method to fetch initial data
   const fetchInitialData = () => {
-    setLoading(true);
+    setInitialDataLoading(true);
 
     Promise.all([getProductRandom(), getTopLevelCategories()])
       .then(([randomProduct, topLevelCategories]) => {
         setProduct(randomProduct);
         setCategories(topLevelCategories);
       })
-      .catch((err) => {
-        setError("Failed to fetch initial data: " + err.message);
+      .catch((error) => {
+        setInitialDataError("Failed to fetch initial data: " + error.message);
       })
       .finally(() => {
-        setLoading(false);
+        setInitialDataLoading(false);
       });
   };
 
   // method to get products based on activeTab and page
   const fetchProducts = () => {
-    getProductsPaginated(activeTab, page, 8)
-      .then((res) => {
+    setLoading(true);
+
+    getProductsByCriteria(activeTab, page, HOME_DEFAULT_PAGE_NUMBER)
+      .then((products) => {
         setItems((prevItems) =>
-          page === 0 ? [...res.content] : [...prevItems, ...res.content]
+          page === 0 ? [...products.content] : [...prevItems, ...products.content]
         );
-        setHasMore(res.content.length > 0);
+        setHasMore(products.content.length > 0);
       })
-      .catch((err) => {
-        setError(err.message);
+      .catch((error) => {
+        setError(error.message);
+      }).finally(() => {
+        setLoading(false);
       });
   };
 
@@ -83,45 +90,55 @@ const Home = () => {
     setPage((prevPage) => prevPage + 1);
   };
 
-  if (loading) return <LoadingComponent />;
-  if (error) return <ErrorComponent message={ error } />;
+  const [sentryRef] = useInfiniteScroll({
+    loading,
+    hasNextPage: hasMore,
+    onLoadMore: fetchNextPage,
+    rootMargin: '0px 0px 200px 0px',
+  });
+
+  if (initialDataError || error) return <ErrorComponent message={ initialDataError || error } />;
 
   return (
     <>
       <div className="home-container">
-        <div className="home-upper">
+        { initialDataLoading ? (<LoadingComponent />) : (
+          <div className="home-upper">
           <div className="categories body-regular">
             <div className="categories-heading">Categories</div>
-            <ul>
-              { categories.map((category) => (
-                <li key={ category.id }>{ category.name }</li>
-              )) }
-              <li>All Categories</li>
-            </ul>
-          </div>
-          <div className="highlighted-product">
-            <div className="product-container">
-              <div className="product-info body-semibold">
-                <span className="product-name">{ product.name }</span>
-                <span className="product-price">
-                  Start From ${ product.startPrice }
-                </span>
-                <span className="body-regular">{ product.description }</span>
-                <Link to={ `${ROUTE_PATHS.SHOP}/${product.id}` }>
-                  <Button label="BID NOW" iconSrc={ go } />
-                </Link>
-              </div>
+              <ul>
+                { categories.map((category) => (
+                  <li key={ category.id }>
+                    <Link to={{ pathname: ROUTE_PATHS.SHOP, search: `?category=${category.id}` }}>{ category.name }</Link>
+                  </li>
+                )) }
+                <li><Link to={ ROUTE_PATHS.SHOP }>All Categories</Link></li>
+              </ul>
             </div>
-            <Link to={ `${ROUTE_PATHS.SHOP}/${product.id}` }>
-              <div className="product-image">
-                <img
-                  src={ product.productImages[0].imageUrl }
-                  alt={ product.name }
-                />
+            <div className="highlighted-product">
+              <div className="product-container">
+                <div className="product-info body-semibold">
+                  <span className="product-name">{ product.name }</span>
+                  <span className="product-price">
+                    Start From ${ product.startPrice }
+                  </span>
+                  <span className="body-regular">{ product.description }</span>
+                  <Link to={ `${ROUTE_PATHS.PRODUCT}/${product.id}` }>
+                    <Button label="BID NOW" iconSrc={ go } />
+                  </Link>
+                </div>
               </div>
-            </Link>
+              <Link to={ `${ROUTE_PATHS.PRODUCT}/${product.id}` }>
+                <div className="product-image">
+                  <img
+                    src={ product.productImages[0].imageUrl }
+                    alt={ product.name }
+                  />
+                </div>
+              </Link>
+            </div>
           </div>
-        </div>
+        ) }
         <div className="products">
           <Tabs
             tabs={ HOME_TABS }
@@ -129,13 +146,13 @@ const Home = () => {
             onTabClick={ setActiveTabHandler }
           />
           <ProductGrid
-            key={ activeTab }
             items={ items }
-            fetchMoreData={ fetchNextPage }
-            hasMore={ hasMore }
-            loading={ loading }
-            activeTab={ activeTab }
           />
+          { (loading || hasMore) && (
+            <div ref={ sentryRef }>
+              <LoadingComponent />
+            </div>
+          ) }
         </div>
       </div>
     </>

@@ -3,7 +3,6 @@ package com.example.auctionapp.model;
 import java.util.UUID;
 
 public class ProductImage {
-
     private String imageUrl;
     private UUID productId;
 

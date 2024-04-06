@@ -1,5 +1,7 @@
 import { NavLink, Link } from "react-router-dom";
 
+import { Searchbar } from "src/components";
+
 import { NAV_ITEMS } from "src/constants";
 import { logo } from "src/assets/images";
 
@@ -13,6 +15,7 @@ const Navbar = () => {
           <img src={ logo } alt="Auction App Logo" />
         </Link>
       </div>
+      <Searchbar />
       <div className="navbar-items body-regular">
         { NAV_ITEMS.map((item) => (
           <NavLink

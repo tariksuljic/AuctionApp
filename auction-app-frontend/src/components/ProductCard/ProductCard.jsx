@@ -7,7 +7,7 @@ import "./style.scss";
 const ProductCard = ({ id, productImages, name, startPrice }) => {
   return (
     <div className="product-card">
-      <Link to={ `${ROUTE_PATHS.SHOP}/${id}` }>
+      <Link to={ `${ROUTE_PATHS.PRODUCT}/${id}` }>
         <div className="img-container">
           <img src={ productImages[0].imageUrl } alt={ name } />
         </div>

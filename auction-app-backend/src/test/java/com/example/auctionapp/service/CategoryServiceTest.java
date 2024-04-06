@@ -20,7 +20,6 @@ import static org.mockito.Mockito.when;
 @AutoConfigureMockMvc
 @SpringBootTest(classes = AuctionAppBackendApplication.class)
 public class CategoryServiceTest {
-
     @MockBean
     private CategoryRepository categoryRepository;
 

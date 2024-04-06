@@ -1,7 +1,7 @@
 import { createContext, useState, useContext, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
-import { ROUTES_MAP, HIDE_BREADCRUMBS_ON_PATHS } from "src/constants";
+import { ROUTES_MAP, HIDE_BREADCRUMBS_ON_PATHS, SEARCH_RESULTS } from "src/constants";
 
 const BreadcrumbContext = createContext();
 
@@ -13,36 +13,61 @@ export const BreadcrumbProvider = ({ children }) => {
 
   const location = useLocation();
 
-  const hideBreadcrumbs = HIDE_BREADCRUMBS_ON_PATHS.includes(location.pathname); // Hide breadcrumbs on certain paths
+  // regex to match shop page with categories ids
+  const shopPageRegex = /^\/shop\/[\w-]+(\/)?$/;
+  const isShopPage = shopPageRegex.test(location.pathname);
+
+  // also hide breadcrumbs from the list
+  const hideBreadcrumbs =
+    HIDE_BREADCRUMBS_ON_PATHS.includes(location.pathname) || isShopPage;
 
   const updateBreadcrumb = (location, title) => {
-    const { pathname } = location;
+    const { pathname, search } = location;
 
     // regex to match product detail pages
-    const productDetailRegex = /^\/shop\/[\w-]+(\/)?$/;
+    const productDetailRegex = /^\/product\/[\w-]+(\/)?$/;
     const isProductDetailPage = productDetailRegex.test(pathname);
 
+    // get the search term from the URL if it exists
+    const searchParams = new URLSearchParams(search);
+    const searchTerm = searchParams.get("search_product");
+
+    const isSearchPage = searchTerm !== null;
+
     // determine the label for the current page
-    const label = isProductDetailPage ? "Single Product" : ROUTES_MAP[pathname];
+    let label; 
+
+    if(isProductDetailPage) {
+      label = "Single Product";
+    } else if(isSearchPage) {
+      label = `${SEARCH_RESULTS} ${searchTerm}`
+    } else if(isShopPage) {
+      label = "Shop";
+    } else {
+      label = ROUTES_MAP[pathname];
+    }
 
     // update the title for non-product detail pages
     if (!isProductDetailPage || !title) {
       setTitle(label);
     }
 
-    // if the pathname has changed, update breadcrumbs
-    setBreadcrumbs((prev) => {
-      // check if the previous page is the same as the current one to avoid duplication
-      if (prev.length && prev[prev.length - 1].path === pathname) {
-        // if already on the current page, don't add to breadcrumbs
-        return prev;
-      } else {
-        const newBreadcrumbs = prev.length
-          ? [prev[prev.length - 1], { path: pathname, label: label }]
-          : [{ path: pathname, label: label }];
-        return newBreadcrumbs;
+    if (isSearchPage) {
+      setBreadcrumbs([{ path: "/", label: "Home" }, { path: pathname, label: label }]);
+    } else {
+      setBreadcrumbs((prev) => {
+        // check if the previous page is the same as the current one to avoid duplication
+        if (prev.length && prev[prev.length - 1].path === pathname) {
+          // if already on the current page, don't add to breadcrumbs
+          return prev;
+        } else {
+          const newBreadcrumbs = prev.length
+            ? [prev[prev.length - 1], { path: pathname, label: label }]
+            : [{ path: pathname, label: label }];
+          return newBreadcrumbs;
+          }
+        });
       }
-    });
   };
 
   useEffect(() => {

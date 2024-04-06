@@ -6,7 +6,6 @@ import java.util.UUID;
 import java.util.List;
 
 public class Product {
-
     private UUID id;
     private String name;
     private String description;

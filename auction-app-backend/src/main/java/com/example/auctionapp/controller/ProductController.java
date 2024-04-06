@@ -4,7 +4,6 @@ import com.example.auctionapp.model.Product;
 import com.example.auctionapp.service.ProductService;
 import com.example.auctionapp.request.ProductAddRequest;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,13 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 import java.util.UUID;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/products")
 public class ProductController {
-
     private final ProductService productService;
 
     public ProductController(final ProductService productService) {
@@ -31,8 +29,11 @@ public class ProductController {
     @GetMapping
     public Page<Product> getProducts(
             @RequestParam(value = "page", defaultValue = "0") final int page,
-            @RequestParam(value = "size", defaultValue = "8") final int size) {
-        return this.productService.getProducts(page, size);
+            @RequestParam(value = "size", defaultValue = "8") final int size,
+            @RequestParam(value = "category_id", required = false) final UUID categoryId,
+            @RequestParam(value = "search_product", required = false) final String searchProduct
+    ) {
+        return productService.getProducts(categoryId, searchProduct, page, size);
     }
 
     @PostMapping

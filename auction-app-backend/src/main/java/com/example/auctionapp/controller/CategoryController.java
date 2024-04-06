@@ -20,7 +20,6 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/categories")
 public class CategoryController {
-
     private final CategoryService categoryService;
 
     public CategoryController(final CategoryService categoryService) {
@@ -35,6 +34,11 @@ public class CategoryController {
     @GetMapping("/top-level")
     public List<Category> getTopLevelCategories() {
         return this.categoryService.getTopLevelCategories();
+    }
+
+    @GetMapping("/with-subcategories")
+    public List<Category> getCategoriesWithSubcategories() {
+        return this.categoryService.getCategoriesWithSubcategories();
     }
 
     @PostMapping

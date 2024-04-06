@@ -19,7 +19,7 @@ const Header = () => {
             <span> or </span>
             <a href="/create-account">Create an account</a>
           </div>
-        )}
+        ) }
       </div>
     </div>
   );

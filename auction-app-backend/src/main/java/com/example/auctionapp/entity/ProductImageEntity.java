@@ -16,7 +16,6 @@ import java.util.UUID;
 @Entity
 @Table(name = "product_image", schema="auction_app")
 public class ProductImageEntity {
-
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")

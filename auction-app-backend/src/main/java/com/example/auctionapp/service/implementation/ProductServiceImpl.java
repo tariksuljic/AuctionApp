@@ -7,23 +7,19 @@ import com.example.auctionapp.exceptions.repository.ResourceNotFoundException;
 import com.example.auctionapp.repository.CategoryRepository;
 import com.example.auctionapp.repository.ProductRepository;
 import com.example.auctionapp.service.ProductService;
+import com.example.auctionapp.specification.ProductSpecification;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 import java.util.UUID;
-
-import static java.util.stream.Collectors.toList;
 
 @Service
 public class ProductServiceImpl implements ProductService {
-
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
 
@@ -33,10 +29,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Page<Product> getProducts(final int page, final int size) {
+    public Page<Product> getProducts(final UUID categoryId, final String searchProduct, final int page, final int size) {
         Pageable pageable = PageRequest.of(page, size);
+        Specification<ProductEntity> specification = ProductSpecification.withDynamicQuery(categoryId, searchProduct);
 
-        return this.productRepository.findAll(pageable).map(ProductEntity::toDomainModel);
+        return productRepository.findAll(specification, pageable).map(ProductEntity::toDomainModel);
     }
 
     @Override
@@ -98,9 +95,8 @@ public class ProductServiceImpl implements ProductService {
 
         Sort sort = Sort.by(direction, sortBy).and(Sort.by(Sort.Direction.ASC, "productId"));
         Pageable pageable = PageRequest.of(page, size, sort);
-        Page<ProductEntity> productPage = productRepository.findAll(pageable);
 
-        return productPage.map(ProductEntity::toDomainModel);
+        return productRepository.findAll(pageable).map(ProductEntity::toDomainModel);
     }
 
     @Override

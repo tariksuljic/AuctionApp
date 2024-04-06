@@ -4,7 +4,6 @@ import com.example.auctionapp.entity.CategoryEntity;
 import java.util.UUID;
 
 public class CategoryAddRequest {
-
     private String name;
     private UUID parentCategoryId;
 

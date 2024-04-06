@@ -1,0 +1,33 @@
+@import "src/scss/index.scss";
+
+.search-bar {
+    @include flex-container(row, center, center);
+    width: 548px;
+    height: 58px;
+    padding: 12px 20px;
+    border: 1px solid $neutral09;
+    
+    .search-input {
+      width: 100%;
+      height: 100%;
+      border: none;
+      outline: none;
+      font-family: $font-family-lato;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 24px;
+      text-align: left;
+      color: $neutral05;
+    }
+
+    .search-button {
+      background: none;
+      border: none;
+      cursor: pointer;
+
+      img {
+        width: 17px;
+        height: 17px;
+      }
+    }
+}

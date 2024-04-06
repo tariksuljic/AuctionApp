@@ -30,7 +30,7 @@
     }
 
     .highlighted-product {
-      @include flex-container(row, flex-start, flex-start);
+      @include flex-container(row, center, center);
       width: 739px;
       height: 420px;
       flex: 1;
@@ -47,7 +47,7 @@
       }
 
       .product-container {
-        @include flex-container(row, center, flex-start);
+        @include flex-container(row, center, center);
         gap: 36px;
         height: 420px;
         flex: 1;

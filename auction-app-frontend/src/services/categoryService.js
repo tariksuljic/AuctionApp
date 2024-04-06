@@ -4,4 +4,8 @@ const getTopLevelCategories = () => {
   return getRequest("/categories/top-level");
 };
 
-export { getTopLevelCategories };
+const getCategoriesWithSubcategories = () => {
+  return getRequest("/categories/with-subcategories");
+};
+
+export { getTopLevelCategories, getCategoriesWithSubcategories };

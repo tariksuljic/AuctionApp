@@ -36,11 +36,12 @@ export const ROUTE_PATHS = {
   PRIVACY_POLICY: "/privacy-policy",
   TERMS_AND_CONDITIONS: "/terms-and-conditions",
   SHOP: "/shop",
+  PRODUCT: "/product",
 };
 
 export const HIDE_BREADCRUMBS_ON_PATHS = [
   ROUTE_PATHS.HOME,
-  // will add more routes when needed
+  ROUTE_PATHS.SHOP,
 ];
 
 export const HOME_TABS = [
@@ -49,3 +50,9 @@ export const HOME_TABS = [
 ];
 
 export const PRODUCT_DETAILS_TABS = [{ id: "details", label: "Details" }];
+
+export const SEARCH_RESULTS = "Search results for"
+
+export const SHOP_DEFAULT_PAGE_NUMBER = 9;
+
+export const HOME_DEFAULT_PAGE_NUMBER = 8;

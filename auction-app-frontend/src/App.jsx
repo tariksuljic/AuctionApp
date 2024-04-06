@@ -40,8 +40,12 @@ const App = () => {
                 element={ <TermsAndConditions /> }
               />
               <Route
-                path={ `${ROUTE_PATHS.SHOP}/:id` }
+                path={ `${ROUTE_PATHS.PRODUCT}/:id` }
                 element={ <ProductDetails /> }
+              />
+              <Route 
+                path={ ROUTE_PATHS.SHOP } 
+                element={ <Shop /> } 
               />
             </Routes>
           </div>

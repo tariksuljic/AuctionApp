@@ -8,15 +8,19 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.util.UUID;
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 @Entity
 @Table(name = "category", schema="auction_app")
 public class CategoryEntity {
-
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
@@ -29,6 +33,12 @@ public class CategoryEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_category_id")
     private CategoryEntity parentCategory;
+
+    @OneToMany(mappedBy = "parentCategory", fetch = FetchType.LAZY)
+    private List<CategoryEntity> subCategories;
+
+    @Formula("(SELECT COUNT(*) FROM auction_app.product p WHERE p.category_id = category_id)")
+    private int productCount;
 
     public CategoryEntity() {
     }
@@ -44,9 +54,13 @@ public class CategoryEntity {
 
         category.setId(this.categoryId);
         category.setName(this.name);
+        category.setProductCount(this.productCount);
 
-        if (this.parentCategory != null) {
-            category.setParentCategory(this.parentCategory.toDomainModel());
+        if (this.subCategories != null && !this.subCategories.isEmpty()) {
+            List<Category> subCategoryModels = this.subCategories.stream()
+                    .map(CategoryEntity::toDomainModel)
+                    .collect(toList());
+            category.setSubCategories(subCategoryModels);
         }
 
         return category;
@@ -74,5 +88,21 @@ public class CategoryEntity {
 
     public void setParentCategory(final CategoryEntity parentCategory) {
         this.parentCategory = parentCategory;
+    }
+
+    public List<CategoryEntity> getSubCategories() {
+        return subCategories;
+    }
+
+    public void setSubCategories(final List<CategoryEntity> subCategories) {
+        this.subCategories = subCategories;
+    }
+
+    public int getProductCount() {
+        return productCount;
+    }
+
+    public void setProductCount(final int productCount) {
+        this.productCount = productCount;
     }
 }

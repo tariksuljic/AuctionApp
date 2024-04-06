@@ -1,0 +1,52 @@
+@import "src/scss/index.scss";
+
+.checkbox-container {
+  @include flex-container(column, flex-start, flex-start);
+
+  .checkbox-label {
+    @include flex-container(row, flex-start, center);
+    position: relative;
+    cursor: pointer;
+    color: $neutral05;
+
+    .checkbox-input {
+      position: absolute;
+      cursor: pointer;
+      opacity: 0;
+      height: 0;
+      width: 0;
+
+      &:checked ~ .checkbox-custom {
+        background-color: $primary;
+        border-color: $primary;
+
+        &:after {
+          display: block;
+        }
+      }
+    }
+
+    .checkbox-custom {
+      position: relative;
+      height: 16px;
+      width: 16px;
+      background-color: transparent;
+      border: 2px solid $primary;
+      border-radius: 3px;
+      margin-right: 10px;
+
+      &:after {
+        content: "";
+        position: absolute;
+        display: none;
+        left: 4px;
+        top: 0.5px;
+        width: 5px;
+        height: 10px;
+        border: solid white;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+      }
+    }
+  }
+}
