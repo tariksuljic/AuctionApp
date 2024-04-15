@@ -1,0 +1,9 @@
+@import "src/scss/index.scss";
+
+.suggestion-box {
+  padding: 45px 0 0 466px;
+  
+  .suggestion {
+    color: $primary;
+  }
+}

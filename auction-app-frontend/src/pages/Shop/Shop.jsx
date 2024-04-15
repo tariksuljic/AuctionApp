@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
-import { 
-  Button, 
-  Checkbox, 
+import {
+  Button,
+  Checkbox,
   ProductGrid,
   ErrorComponent,
-  LoadingComponent 
+  LoadingComponent,
 } from "src/components";
 
-import {
-  getProducts,
-  getCategoriesWithSubcategories
-} from "src/services";
+import { getProducts, getCategoriesWithSubcategories } from "src/services";
+import { useSuggestion } from "src/store/SuggestionContext";
 import { collapse, expand } from "src/assets/icons";
 import { SHOP_DEFAULT_PAGE_NUMBER } from "src/constants";
 
@@ -34,6 +32,8 @@ const Shop = () => {
   const [categoriesLoading, setCategoriesLoading] = useState(true);
   const [checked, setChecked] = useState({});
 
+  const { setSuggestion } = useSuggestion();
+
   const navigate = useNavigate();
   const query = useQuery();
 
@@ -42,34 +42,46 @@ const Shop = () => {
 
   const fetchProducts = () => {
     setProductsLoading(true);
-    
+
     getProducts(page, SHOP_DEFAULT_PAGE_NUMBER, categoryId, searchProduct)
-      .then((products) => {
+      .then((response) => {
+        const { products, suggestion } = response;
+
+        if (suggestion) {
+          setSuggestion(suggestion);
+        } else {
+          setSuggestion(null);
+        }
+
         setItems((prevItems) =>
-          page === 0 ? [...products.content] : [...prevItems, ...products.content]
+          page === 0
+            ? [...products.content]
+            : [...prevItems, ...products.content]
         );
         setHasMore(!products.last);
       })
       .catch((error) => {
         setProductsError(error.message);
-      }).finally(() => {
+      })
+      .finally(() => {
         setProductsLoading(false);
       });
   };
 
   const fetchCategories = () => {
     setCategoriesLoading(true);
-    
+
     getCategoriesWithSubcategories()
       .then((categories) => {
         setCategories(categories);
-        const activeCat = categories.find(cat => cat.id === categoryId);
+        const activeCat = categories.find((cat) => cat.id === categoryId);
 
-        !!activeCat && setActiveCategory(activeCat.name)
+        !!activeCat && setActiveCategory(activeCat.name);
       })
       .catch((err) => {
         setCategoriesError(err.message);
-      }).finally(() => {
+      })
+      .finally(() => {
         setCategoriesLoading(false);
       });
   };
@@ -88,19 +100,21 @@ const Shop = () => {
   };
 
   const handleCheckboxChange = (id, checked) => {
-    setChecked(prev => ({ ...prev, [id]: checked }));
+    setChecked((prev) => ({ ...prev, [id]: checked }));
   };
 
   const handleCategoryChange = (categoryId) => {
     let url = "/shop";
     const queryParams = new URLSearchParams();
 
-    if (activeCategory === categories.find(cat => cat.id === categoryId).name) {
+    if (
+      activeCategory === categories.find((cat) => cat.id === categoryId).name
+    ) {
       queryParams.delete("category");
       setActiveCategory(null);
     } else {
       queryParams.set("category", categoryId);
-      setActiveCategory(categories.find(cat => cat.id === categoryId).name);
+      setActiveCategory(categories.find((cat) => cat.id === categoryId).name);
     }
 
     if (searchProduct) {
@@ -112,58 +126,68 @@ const Shop = () => {
     navigate(url);
   };
 
-  if(productsError || categoriesError) return <ErrorComponent error={ productsError || categoriesError } />;
+  if (productsError || categoriesError)
+    return <ErrorComponent error={ productsError || categoriesError } />;
 
   return (
-    <div className="shop-container">
-      { categoriesLoading ? ( <LoadingComponent /> ) : (
-        <>
-          <div className="categories">
-            <span className="body-regular">PRODUCT CATEGORIES</span>
-            <div className="category-list body-regular">
-              { categories.map((category) => (
-                <div key={ category.id } className="category-item body-regular">
-                  <button
-                    className={ `category-name ${activeCategory === category.name ? "active" : ""}` }
-                    onClick={ () => handleCategoryChange(category.id) }
-                  >
-                    { category.name }
-                    { activeCategory === category.name ? (
-                      <img src={ collapse } alt="Collapse" />
-                    ) : (
-                      <img src={ expand } alt="Expand" />
-                    ) }
-                  </button>
-                  { activeCategory === category.name && category.subCategories && (
-                    <div className="subcategory-list">
-                      { category.subCategories.map((subcategory) => (
-                        <Checkbox
-                          key={ subcategory.id }
-                          label={ `${subcategory.name} (${subcategory.productCount})` }
-                          onChange={ (checked) => handleCheckboxChange(subcategory.id, checked) }
-                        />
-                      )) }
-                    </div>
-                  ) }
-                </div>
-              )) }
+    <>
+      <div className='shop-container'>
+        { categoriesLoading ? (
+          <LoadingComponent />
+        ) : (
+          <>
+            <div className='categories'>
+              <span className='body-regular'>PRODUCT CATEGORIES</span>
+              <div className='category-list body-regular'>
+                { categories.map((category) => (
+                  <div key={ category.id } className='category-item body-regular'>
+                    <button
+                      className={ `category-name ${
+                        activeCategory === category.name ? "active" : ""
+                      }` }
+                      onClick={ () => handleCategoryChange(category.id) }
+                    >
+                      { category.name }
+                      { activeCategory === category.name ? (
+                        <img src={ collapse } alt='Collapse' />
+                      ) : (
+                        <img src={ expand } alt='Expand' />
+                      )}
+                    </button>
+                    { activeCategory === category.name &&
+                      category.subCategories && (
+                        <div className='subcategory-list'>
+                          { category.subCategories.map((subcategory) => (
+                            <Checkbox
+                              key={ subcategory.id }
+                              label={ `${subcategory.name} (${subcategory.productCount})` }
+                              onChange={ (checked) =>
+                                handleCheckboxChange(subcategory.id, checked)
+                              }
+                            />
+                          )) }
+                        </div>
+                      ) }
+                  </div>
+                )) }
+              </div>
             </div>
-          </div>
-        </>
-      ) }
-      <div className="product-list">
-        <ProductGrid items={ items } />
-        { hasMore && (
-        <div className="explore-btn">
-          <Button
-            label="Explore More"
-            variant="filled"
-            onButtonClick={ fetchNextPage }
-          />
-        </div>
+          </>
         ) }
+        <div className='product-list'>
+          <ProductGrid items={ items } />
+          { hasMore && (
+            <div className='explore-btn'>
+              <Button
+                label='Explore More'
+                variant='filled'
+                onButtonClick={ fetchNextPage }
+              />
+            </div>
+          ) }
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

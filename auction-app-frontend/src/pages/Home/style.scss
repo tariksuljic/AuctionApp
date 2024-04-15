@@ -36,10 +36,10 @@
       flex: 1;
 
       .product-image {
-        height: 100%;
+        max-height: 420px;
 
         img {
-          max-height: 100%;
+          max-height: 420px;
           width: 357px;
           object-fit: cover;
           cursor: pointer;

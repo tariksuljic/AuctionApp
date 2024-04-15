@@ -6,8 +6,10 @@ import com.example.auctionapp.model.Product;
 import com.example.auctionapp.exceptions.repository.ResourceNotFoundException;
 import com.example.auctionapp.repository.CategoryRepository;
 import com.example.auctionapp.repository.ProductRepository;
+import com.example.auctionapp.response.ProductSearchResponse;
 import com.example.auctionapp.service.ProductService;
 import com.example.auctionapp.specification.ProductSpecification;
+import com.example.auctionapp.util.ComputeSuggestion;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -29,11 +32,25 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Page<Product> getProducts(final UUID categoryId, final String searchProduct, final int page, final int size) {
+    public ProductSearchResponse getProducts(UUID categoryId, String searchProduct, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Specification<ProductEntity> specification = ProductSpecification.withDynamicQuery(categoryId, searchProduct);
 
-        return productRepository.findAll(specification, pageable).map(ProductEntity::toDomainModel);
+        final Page<Product> products = productRepository.findAll(specification, pageable).map(ProductEntity::toDomainModel);
+        String suggestedQuery = null;
+
+        if (products.getTotalElements() < size && searchProduct != null && !searchProduct.isBlank()) {
+            final List<String> productNames = this.productRepository.findAllProductNames();
+            suggestedQuery = ComputeSuggestion.suggestCorrection(productNames, searchProduct);
+
+            if (suggestedQuery != null && !suggestedQuery.equalsIgnoreCase(searchProduct)) {
+                suggestedQuery = suggestedQuery;
+            } else {
+                suggestedQuery = null;
+            }
+        }
+
+        return new ProductSearchResponse(products, suggestedQuery);
     }
 
     @Override

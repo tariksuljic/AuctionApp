@@ -16,10 +16,14 @@ const getProductRandom = () => {
 
 const getProducts = (page, size, categoryId, searchQuery) => {
   // construct query string based on the presence of categoryId or search query
-  const categoryParam = categoryId ? `&category_id=${categoryId}` : '';
-  const searchParam = searchQuery ? `&search_product=${encodeURIComponent(searchQuery)}` : '';
-  
-  return getRequest(`/products?page=${page}&size=${size}${categoryParam}${searchParam}`);
+  const categoryParam = categoryId ? `&category_id=${categoryId}` : "";
+  const searchParam = searchQuery
+    ? `&search_product=${encodeURIComponent(searchQuery)}`
+    : "";
+
+  return getRequest(
+    `/products?page=${page}&size=${size}${categoryParam}${searchParam}`
+  );
 };
 
 export { getProducts, getProduct, getProductRandom, getProductsByCriteria };

@@ -18,7 +18,11 @@ import {
 
 import { go } from "src/assets/icons";
 
-import { HOME_TABS, ROUTE_PATHS, HOME_DEFAULT_PAGE_NUMBER } from "src/constants";
+import {
+  HOME_TABS,
+  ROUTE_PATHS,
+  HOME_DEFAULT_PAGE_NUMBER,
+} from "src/constants";
 
 import "./style.scss";
 
@@ -58,13 +62,16 @@ const Home = () => {
     getProductsByCriteria(activeTab, page, HOME_DEFAULT_PAGE_NUMBER)
       .then((products) => {
         setItems((prevItems) =>
-          page === 0 ? [...products.content] : [...prevItems, ...products.content]
+          page === 0
+            ? [...products.content]
+            : [...prevItems, ...products.content]
         );
         setHasMore(products.content.length > 0);
       })
       .catch((error) => {
         setError(error.message);
-      }).finally(() => {
+      })
+      .finally(() => {
         setLoading(false);
       });
   };
@@ -94,42 +101,54 @@ const Home = () => {
     loading,
     hasNextPage: hasMore,
     onLoadMore: fetchNextPage,
-    rootMargin: '0px 0px 200px 0px',
+    rootMargin: "0px 0px 200px 0px",
   });
 
-  if (initialDataError || error) return <ErrorComponent message={ initialDataError || error } />;
+  if (initialDataError || error)
+    return <ErrorComponent message={initialDataError || error} />;
 
   return (
     <>
-      <div className="home-container">
-        { initialDataLoading ? (<LoadingComponent />) : (
-          <div className="home-upper">
-          <div className="categories body-regular">
-            <div className="categories-heading">Categories</div>
+      <div className='home-container'>
+        { initialDataLoading ? (
+          <LoadingComponent />
+        ) : (
+          <div className='home-upper'>
+            <div className='categories body-regular'>
+              <div className='categories-heading'>Categories</div>
               <ul>
                 { categories.map((category) => (
                   <li key={ category.id }>
-                    <Link to={{ pathname: ROUTE_PATHS.SHOP, search: `?category=${category.id}` }}>{ category.name }</Link>
+                    <Link
+                      to={{
+                        pathname: ROUTE_PATHS.SHOP,
+                        search: `?category=${category.id}`,
+                      }}
+                    >
+                      { category.name }
+                    </Link>
                   </li>
                 )) }
-                <li><Link to={ ROUTE_PATHS.SHOP }>All Categories</Link></li>
+                <li>
+                  <Link to={ ROUTE_PATHS.SHOP }>All Categories</Link>
+                </li>
               </ul>
             </div>
-            <div className="highlighted-product">
-              <div className="product-container">
-                <div className="product-info body-semibold">
-                  <span className="product-name">{ product.name }</span>
-                  <span className="product-price">
+            <div className='highlighted-product'>
+              <div className='product-container'>
+                <div className='product-info body-semibold'>
+                  <span className='product-name'>{ product.name }</span>
+                  <span className='product-price'>
                     Start From ${ product.startPrice }
                   </span>
-                  <span className="body-regular">{ product.description }</span>
+                  <span className='body-regular'>{ product.description }</span>
                   <Link to={ `${ROUTE_PATHS.PRODUCT}/${product.id}` }>
-                    <Button label="BID NOW" iconSrc={ go } />
+                    <Button label='BID NOW' iconSrc={ go } />
                   </Link>
                 </div>
               </div>
               <Link to={ `${ROUTE_PATHS.PRODUCT}/${product.id}` }>
-                <div className="product-image">
+                <div className='product-image'>
                   <img
                     src={ product.productImages[0].imageUrl }
                     alt={ product.name }
@@ -139,15 +158,13 @@ const Home = () => {
             </div>
           </div>
         ) }
-        <div className="products">
+        <div className='products'>
           <Tabs
             tabs={ HOME_TABS }
             activeTab={ activeTab }
             onTabClick={ setActiveTabHandler }
           />
-          <ProductGrid
-            items={ items }
-          />
+          <ProductGrid items={ items } />
           { (loading || hasMore) && (
             <div ref={ sentryRef }>
               <LoadingComponent />
