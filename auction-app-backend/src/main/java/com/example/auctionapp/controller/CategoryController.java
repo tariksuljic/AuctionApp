@@ -3,6 +3,7 @@ package com.example.auctionapp.controller;
 import com.example.auctionapp.model.Category;
 import com.example.auctionapp.service.CategoryService;
 import com.example.auctionapp.request.CategoryAddRequest;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +20,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/categories")
+@SecurityRequirement(name = "JWT Security")
 public class CategoryController {
     private final CategoryService categoryService;
 

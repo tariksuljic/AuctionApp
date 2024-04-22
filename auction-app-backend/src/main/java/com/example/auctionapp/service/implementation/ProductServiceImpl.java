@@ -118,13 +118,11 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product getRandomProduct() {
-        final Optional<ProductEntity> randomProductEntity = productRepository.findRandomProduct();
+        ProductEntity randomProductEntity = productRepository.findRandomProduct()
+                .orElseThrow(() -> new ResourceNotFoundException("No products available"));
 
-        if (randomProductEntity.isEmpty()) {
-            throw new ResourceNotFoundException("No products available");
-        }
-
-        return randomProductEntity.get().toDomainModel();
+        return randomProductEntity.toDomainModel();
     }
+
 }
 

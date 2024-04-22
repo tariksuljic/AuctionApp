@@ -4,6 +4,7 @@ import com.example.auctionapp.model.Product;
 import com.example.auctionapp.response.ProductSearchResponse;
 import com.example.auctionapp.service.ProductService;
 import com.example.auctionapp.request.ProductAddRequest;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +20,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/products")
+@SecurityRequirement(name = "JWT Security")
 public class ProductController {
     private final ProductService productService;
 

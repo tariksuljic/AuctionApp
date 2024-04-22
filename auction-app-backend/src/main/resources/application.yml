@@ -25,3 +25,12 @@ configuration:
     developer: 'Lejla Muratović'
     email: 'lejlamuratovic6@gmail.com'
 
+security:
+  jwt:
+    secret: '72e4005430b4306533e93b0852df15a34f2564c5db289d03b76c9aa0c6bab7b3'
+
+JWT_SECURE: false
+
+cookie:
+  accessExpiry: 120000 # 2 minutes in milliseconds
+  refreshExpiry: 604800000 # 7 days in milliseconds
