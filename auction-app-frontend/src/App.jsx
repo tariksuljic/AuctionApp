@@ -15,10 +15,13 @@ import {
   Shop,
   MyAccount,
   ProductDetails,
+  LoginPage,
+  RegisterPage
 } from "src/pages";
 
 import { BreadcrumbProvider } from "src/store/BreadcrumbContext";
 import { SuggestionProvider } from "src/store/SuggestionContext";
+import { UserNameProvider } from "src/store/UserNameContext";
 
 import { ROUTE_PATHS } from "src/constants";
 
@@ -29,7 +32,8 @@ const App = () => {
     <>
       <BreadcrumbProvider>
       <SuggestionProvider>
-        <Header />
+      <UserNameProvider>
+        <Header /> 
         <Navbar />
         <div className="main-content">
           <div className="container">
@@ -55,10 +59,19 @@ const App = () => {
                 path={ ROUTE_PATHS.SHOP } 
                 element={ <Shop /> } 
               />
+              <Route 
+                path={ ROUTE_PATHS.LOGIN } 
+                element={ <LoginPage /> } 
+              />
+              <Route
+                path={ ROUTE_PATHS.REGISTER }
+                element={ <RegisterPage /> }
+              />
             </Routes>
           </div>
           <Footer />
         </div>
+      </UserNameProvider>
       </SuggestionProvider>
       </BreadcrumbProvider>
     </>

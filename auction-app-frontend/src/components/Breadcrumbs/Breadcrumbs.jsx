@@ -12,7 +12,7 @@ const Breadcrumbs = () => {
 
   if (hideBreadcrumbs) return null;
 
-  const isSearchPage = breadcrumbs.some(crumb => crumb.label.startsWith(SEARCH_RESULTS));
+  const isSearchPage = breadcrumbs.some(crumb => crumb.label && crumb.label.startsWith(SEARCH_RESULTS));
 
   return (
     <div className="breadcrumbs">

@@ -1,5 +1,6 @@
 package com.example.auctionapp.service.implementation;
 
+import com.example.auctionapp.entity.UserEntity;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -62,6 +63,9 @@ public class JwtService {
     }
 
     private String generateToken(Map<String, Object> claims, UserDetails userDetails) {
+        UserEntity userEntity = (UserEntity) userDetails;
+        claims.put("role", userEntity.getRole().name());
+
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + cookieExpiry);
 

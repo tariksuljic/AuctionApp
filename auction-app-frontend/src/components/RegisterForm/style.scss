@@ -1,0 +1,46 @@
+@import "src/scss/index.scss";
+
+.register-form-container {
+    @include flex-container(column, center, center);
+    width: 738px;
+    padding: 0px 0px 64px 0px;
+    border: 1px solid $neutral09;
+
+    .register-form {
+        @include flex-container(column, center, center);
+        max-width: 548px;
+        gap: 32px;
+
+        h5 {
+            color: $neutral00;
+        }
+    
+        .form-inputs {
+            @include flex-container(column, center, center);
+            gap: 32px;
+        }
+    
+        button {
+            width: 100%;
+        }
+    
+        .form-link {
+            color: $neutral05;
+    
+            .login {
+                color: $primary;
+                cursor: pointer;
+            }
+        }
+
+        .input-field {
+            margin-bottom: 32px;
+        }
+
+        .error-message-body {
+            color: $error;
+            font-size: 14px;
+            margin-bottom: 32px;
+        }
+    }
+}

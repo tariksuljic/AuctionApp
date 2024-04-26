@@ -1,0 +1,43 @@
+@import "src/scss/index.scss";
+
+.input-field {
+    @include flex-container(column, start, start);
+    gap: 10px;
+
+    input {
+        width: 548px;
+        height: 60px;
+        border: 1px solid $neutral09;
+        padding: 10px 10px 10px 20px;
+
+        &::placeholder {
+            color: $neutral05;
+            font-family: $font-family-lato;
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 24px;
+            text-align: left;
+        }
+
+        &:focus {
+            border-color: $neutral00;
+
+            &::placeholder {
+                color: $neutral00;
+            }
+        }
+
+        &.error {
+            border-color: $error;
+    
+            &::placeholder {
+                color: $error;
+            }
+        }
+    }
+
+    .error-message { 
+        color: $error;
+        padding-bottom: 10px;
+    }
+}

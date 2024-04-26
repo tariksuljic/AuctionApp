@@ -30,4 +30,8 @@
       }
     }
   }
+
+  &.center-logo {
+    @include flex-container(row, center, center);
+  }
 }

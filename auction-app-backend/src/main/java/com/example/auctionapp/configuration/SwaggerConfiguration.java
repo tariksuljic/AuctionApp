@@ -28,9 +28,9 @@ import org.springframework.context.annotation.Configuration;
 )
 @SecurityScheme(
         name = "JWT Security",
-        type = SecuritySchemeType.APIKEY,
-        in = SecuritySchemeIn.COOKIE,
-        paramName = CookieUtility.accessToken
+        scheme = "bearer",
+        type = SecuritySchemeType.HTTP,
+        bearerFormat = "JWT"
 )
 public class SwaggerConfiguration {
     // Nothing to do here

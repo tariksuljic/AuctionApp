@@ -14,7 +14,11 @@ public class CorsConfiguration {
             public void addCorsMappings(CorsRegistry registry) {
                 registry
                         .addMapping("/**")
-                        .allowedMethods("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS");
+                        .allowedOriginPatterns("http://*")
+                        .allowedMethods("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
+                        .allowCredentials(true)
+                        .allowedHeaders("*")
+                        .exposedHeaders("Authorization", "Content-Type", "Set-Cookie");
             }
         };
     }

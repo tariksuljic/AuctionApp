@@ -1,0 +1,6 @@
+@import "src/scss/index.scss";
+
+.register-container {
+    @include flex-container(column, center, center);
+    margin-top: 50px;
+}
