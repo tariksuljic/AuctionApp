@@ -15,7 +15,6 @@ public class CategoryAddRequest {
 
         categoryEntity.setName(this.name);
 
-        // parent category id is handled in services
         return categoryEntity;
     }
 
@@ -25,7 +24,7 @@ public class CategoryAddRequest {
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public void setName(final String name) {
@@ -33,7 +32,7 @@ public class CategoryAddRequest {
     }
 
     public UUID getParentCategoryId() {
-        return parentCategoryId;
+        return this.parentCategoryId;
     }
 
     public void setParentCategoryId(final UUID parentCategoryId) {

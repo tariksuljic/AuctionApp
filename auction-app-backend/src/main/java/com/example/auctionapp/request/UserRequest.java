@@ -59,7 +59,7 @@ public class UserRequest {
     }
 
     public String getLastName() {
-        return lastName;
+        return this.lastName;
     }
 
     public void setLastName(String lastName) {

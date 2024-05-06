@@ -1,0 +1,15 @@
+@import "src/scss/index.scss";
+
+.notification-container {
+    @include flex-container(row, flex-start, center);
+    height: 64px;
+}
+
+.primary {
+    color: $primary;
+}
+
+.accent {
+    color: $accent;
+}
+

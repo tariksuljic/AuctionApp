@@ -48,7 +48,7 @@ public class ProductImageEntity {
     }
 
     public UUID getImageId() {
-        return imageId;
+        return this.imageId;
     }
 
     public void setImageId(final UUID imageId) {
@@ -56,7 +56,7 @@ public class ProductImageEntity {
     }
 
     public String getImageUrl() {
-        return imageUrl;
+        return this.imageUrl;
     }
 
     public void setImageUrl(final String imageUrl) {
@@ -64,7 +64,7 @@ public class ProductImageEntity {
     }
 
     public ProductEntity getProductEntity() {
-        return productEntity;
+        return this.productEntity;
     }
 
     public void setProductEntity(final ProductEntity productEntity) {

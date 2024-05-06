@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { FormContainer } from "src/components";
 
 import { loginUser } from "src/services";
-import { useUserName } from "src/store/UserNameContext";
+import { useUser } from "src/store/UserContext";
 import { loginFormFields } from "src/forms/fields";
 import { ROUTE_PATHS, BUTTON_LABELS } from "src/constants";
 
@@ -13,7 +13,7 @@ import "./style.scss";
 
 const LoginForm = () => {
   const navigate = useNavigate();
-  const { setUserName } = useUserName();
+  const { setUserName } = useUser();
 
   const [error, setError] = useState(null);
 

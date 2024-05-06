@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 import "./style.scss";
 
 const Checkbox = ({ label, onChange, checked }) => {

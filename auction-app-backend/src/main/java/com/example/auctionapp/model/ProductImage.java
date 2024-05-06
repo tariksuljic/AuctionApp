@@ -10,7 +10,7 @@ public class ProductImage {
     }
 
     public String getImageUrl() {
-        return imageUrl;
+        return this.imageUrl;
     }
 
     public void setImageUrl(final String imageUrl) {
@@ -18,7 +18,7 @@ public class ProductImage {
     }
 
     public UUID getProductId() {
-        return productId;
+        return this.productId;
     }
 
     public void setProductId(final UUID productId) {

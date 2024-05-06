@@ -14,7 +14,7 @@ public class Category {
     }
 
     public UUID getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(final UUID id) {
@@ -22,7 +22,7 @@ public class Category {
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public void setName(final String name) {
@@ -30,7 +30,7 @@ public class Category {
     }
 
     public Category getParentCategory() {
-        return parentCategory;
+        return this.parentCategory;
     }
 
     public void setParentCategory(final Category parentCategory) {
@@ -38,7 +38,7 @@ public class Category {
     }
 
     public List<Category> getSubCategories() {
-        return subCategories;
+        return this.subCategories;
     }
 
     public void setSubCategories(final List<Category> subCategories) {
@@ -46,7 +46,7 @@ public class Category {
     }
 
     public int getProductCount() {
-        return productCount;
+        return this.productCount;
     }
 
     public void setProductCount(final int productCount) {

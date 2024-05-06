@@ -21,7 +21,8 @@ import {
 
 import { BreadcrumbProvider } from "src/store/BreadcrumbContext";
 import { SuggestionProvider } from "src/store/SuggestionContext";
-import { UserNameProvider } from "src/store/UserNameContext";
+import { WebSocketProvider } from "src/store/WebSocketContext";
+import { UserProvider } from "src/store/UserContext";
 
 import { ROUTE_PATHS } from "src/constants";
 
@@ -32,7 +33,8 @@ const App = () => {
     <>
       <BreadcrumbProvider>
       <SuggestionProvider>
-      <UserNameProvider>
+      <UserProvider>
+      <WebSocketProvider>
         <Header /> 
         <Navbar />
         <div className="main-content">
@@ -71,7 +73,8 @@ const App = () => {
           </div>
           <Footer />
         </div>
-      </UserNameProvider>
+      </WebSocketProvider>
+      </UserProvider>
       </SuggestionProvider>
       </BreadcrumbProvider>
     </>

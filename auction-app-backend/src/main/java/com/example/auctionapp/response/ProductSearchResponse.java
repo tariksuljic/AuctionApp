@@ -13,7 +13,7 @@ public class ProductSearchResponse {
     }
 
     public Page<Product> getProducts() {
-        return products;
+        return this.products;
     }
 
     public void setProducts(final Page<Product> products) {
@@ -21,7 +21,7 @@ public class ProductSearchResponse {
     }
 
     public String getSuggestion() {
-        return suggestion;
+        return this.suggestion;
     }
 
     public void setSuggestion(final String suggestion) {

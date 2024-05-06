@@ -65,6 +65,7 @@ public class JwtService {
     private String generateToken(Map<String, Object> claims, UserDetails userDetails) {
         UserEntity userEntity = (UserEntity) userDetails;
         claims.put("role", userEntity.getRole().name());
+        claims.put("id", userEntity.getUserId());
 
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + cookieExpiry);

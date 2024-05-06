@@ -1,5 +1,7 @@
 export const BASE_URL = "http://localhost:8080/api/v1";
 
+export const WEB_SOCKET_BASE_URL = "ws://localhost:8080/websocket";
+
 export const NAV_ITEMS = [
   {
     label: "HOME",
@@ -68,5 +70,25 @@ export const HOME_DEFAULT_PAGE_NUMBER = 8;
 
 export const BUTTON_LABELS = {
   LOGIN: "LOGIN",
-  REGISTER: "REGISTER"
+  REGISTER: "REGISTER",
+  PLACE_BID: "PLACE BID",
+};
+
+export const BUTTON_VARIANTS = {
+  OUTLINED: "outlined",
+  FILLED: "filled"
+}
+
+export const CONNECTION_STATUSES = {
+  CONNECTED: "connected",
+  DISCONNECTED: "disconnected",
+};
+
+export const USER_TYPES = {
+  ADMIN: "ADMIN",
+  USER: "USER"
+}
+
+export const AUCTION_STATUS = {
+  EXPIRED: "Expired",
 };

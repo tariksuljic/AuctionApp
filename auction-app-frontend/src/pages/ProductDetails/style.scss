@@ -38,6 +38,8 @@
   }
 
   .product-details {
+    @include flex-container(column, flex-start, flex-start);
+    gap: 64px;
     width: 548px;
 
     .product-name {
@@ -84,6 +86,59 @@
           font-size: 14px;
           color: $neutral00;
         }
+      }
+    }
+
+    .product-bid-details {
+      @include flex-container(column, center, center);
+      font-family: $font-family-lato;
+      width: 263px;
+      height: 137px;
+      border: 1px solid $neutral09;
+      gap: 16px;
+
+      .item-key {
+        font-size: 16px;
+        font-weight: 300;
+        line-height: 19.2px;
+      }
+
+      .item-value {
+        color: $primary;
+        font-size: 16px;
+        font-weight: 700;
+        line-height: 19.2px;
+        text-align: left;
+      }
+    }
+
+    .place-bid-form {
+      width: 100%;
+
+      form {
+        @include flex-container(row, space-around, center);
+        position: relative;
+        
+        .input-field {
+          gap: 0;
+  
+          input {
+            height: 50px;
+            width: 330px;
+          }
+        }
+        
+        button {
+          height: 50px;
+          padding: 0 40px;
+        }
+      }
+
+      .error-message { 
+        position: absolute;
+        top: 55px;
+        padding-bottom: 0;
+        width: 330px;
       }
     }
   }

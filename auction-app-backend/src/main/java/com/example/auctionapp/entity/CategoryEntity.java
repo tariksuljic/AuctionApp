@@ -75,7 +75,7 @@ public class CategoryEntity {
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public void setName(final String name) {
@@ -83,7 +83,7 @@ public class CategoryEntity {
     }
 
     public CategoryEntity getParentCategory() {
-        return parentCategory;
+        return this.parentCategory;
     }
 
     public void setParentCategory(final CategoryEntity parentCategory) {
@@ -91,7 +91,7 @@ public class CategoryEntity {
     }
 
     public List<CategoryEntity> getSubCategories() {
-        return subCategories;
+        return this.subCategories;
     }
 
     public void setSubCategories(final List<CategoryEntity> subCategories) {

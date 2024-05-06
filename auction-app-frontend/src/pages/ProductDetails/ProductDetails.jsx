@@ -1,12 +1,23 @@
 import { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 
-import { Tabs, LoadingComponent, ErrorComponent } from "src/components";
+import { Tabs, LoadingComponent, ErrorComponent, FormContainer, Notifications } from "src/components";
 
 import { useBreadcrumb } from "src/store/BreadcrumbContext";
+import { useUser } from "src/store/UserContext";
 import { getProduct } from "src/services";
+import { placeBid } from "src/services/bidService";
+import { calculateTimeLeft } from "src/utils/calculateTimeDifference";
 
-import { PRODUCT_DETAILS_TABS } from "src/constants";
+import { 
+  PRODUCT_DETAILS_TABS, 
+  BUTTON_LABELS, BUTTON_VARIANTS, 
+  USER_TYPES,
+  AUCTION_STATUS
+} from "src/constants";
+import { placeBidsFormFields } from "src/forms/fields";
+import { go } from "src/assets/icons";
 
 import "./style.scss";
 
@@ -17,27 +28,36 @@ const ProductDetails = () => {
   const [mainImage, setMainImage] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [timeLeft, setTimeLeft] = useState(0);
+  const [additionalPlaceBidsFormFields, setAdditionalPlaceBidsFormFields] = useState([]);
+
+  const { userType, userId } = useUser(); 
 
   const { id } = useParams();
 
   const { setTitle } = useBreadcrumb();
 
+  const methods = useForm({
+    mode: "onBlur"
+  });
+
   const fetchInitialData = () => {
     setLoading(true);
 
-    getProduct(id)
-      .then((productDetail) => {
-        setProduct(productDetail);
-        setMainImage(productDetail.productImages[0].imageUrl);
-        // initially remove the first image as it is set as main image
-        setProductImages(productDetail.productImages.slice(1));
-      })
-      .catch((err) => {
-        setError("Failed to fetch initial data", err.message);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    setTimeout(() => {
+      getProduct(id)
+        .then((productDetail) => {
+          setProduct(productDetail);
+          setMainImage(productDetail.productImages[0].imageUrl);
+          setProductImages(productDetail.productImages.slice(1));
+        })
+        .catch((err) => {
+          setError("Failed to fetch initial data", err.message);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }, 500);
   };
 
   useEffect(() => {
@@ -46,7 +66,9 @@ const ProductDetails = () => {
 
   useEffect(() => {
     if (product) {
-      setTitle(`${ product.name }`);
+      setTitle(`${product.name}`);
+      setAdditionalPlaceBidsFormFields(placeBidsFormFields(product.startPrice, product.highestBid));
+      setTimeLeft(calculateTimeLeft(product.endDate));
     }
   }, [product, setTitle]);
 
@@ -55,7 +77,7 @@ const ProductDetails = () => {
   };
 
   const handleImageClick = (clickedImage) => {
-    // find current main image in the product's image list
+    // find current main image in the product"s image list
     const previousMainImage = product.productImages.find(
       (img) => img.imageUrl === mainImage
     );
@@ -70,11 +92,32 @@ const ProductDetails = () => {
     setProductImages(updatedImagesList);
   };
 
+  const onSubmit = (data) => {
+    const bidDetails = {
+      bidAmount: data.bidAmount,
+      bidTime: new Date().toISOString(), // format date to match the backend
+      productId: product.id,
+      userId: userId
+    };
+
+    placeBid(bidDetails)
+      .then(() => {
+        setError(null);
+      })
+      .catch((error) => {
+        setError(error.response.data.message);
+      });
+
+    methods.reset();
+    fetchInitialData(); // fetch the updated product details
+  };
+
   if (loading) return <LoadingComponent />;
   if (error) return <ErrorComponent message={ error } />;
 
   return (
     <>
+      <Notifications productId={ id } fetchProductOnUpdate={ fetchInitialData }/>
       <div className="product-details-container">
         <div className="product-details-images">
           <div className="main-image-container">
@@ -102,7 +145,35 @@ const ProductDetails = () => {
               Starts from <span className="price">${ product.startPrice }</span>
             </span>
           </div>
-          <div className="product-bid-details"></div>
+          <div className="product-bid-details">
+            <div className="product-bid-details-item">
+              <span className="item-key">Highest Bid: </span>
+              <span className="item-value">
+                ${ product.highestBid === null ? "0" : product.highestBid }
+              </span>
+            </div>
+            <div className="product-bid-details-item">
+              <span className="item-key">Number of bids: </span>
+              <span className="item-value">{ product.bidsCount }</span>
+            </div>
+            <div className="product-bid-details-item">
+              <span className="item-key">Time left: </span>
+              <span className="item-value">{ timeLeft }</span>
+            </div>
+          </div>
+          { (AUCTION_STATUS.EXPIRED !== timeLeft && USER_TYPES.USER === userType && userId !== product.userId) && (
+            <div className="place-bid-form">
+              <FormContainer 
+                formFields={ additionalPlaceBidsFormFields } 
+                onSubmit={ methods.handleSubmit(onSubmit) }
+                buttonLabel={ BUTTON_LABELS.PLACE_BID }
+                buttonVariant={ BUTTON_VARIANTS.OUTLINED }
+                buttonIcon={ go }
+                methods={ methods }
+                error= { error }
+              />
+            </div>
+          ) }
           <div className="product-information">
             <Tabs
               tabs={ PRODUCT_DETAILS_TABS }

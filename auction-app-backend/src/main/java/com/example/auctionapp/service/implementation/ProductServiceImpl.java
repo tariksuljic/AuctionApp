@@ -1,5 +1,6 @@
 package com.example.auctionapp.service.implementation;
 
+import com.example.auctionapp.repository.UserRepository;
 import com.example.auctionapp.request.ProductAddRequest;
 import com.example.auctionapp.entity.ProductEntity;
 import com.example.auctionapp.model.Product;
@@ -18,17 +19,18 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final UserRepository userRepository;
 
-    public ProductServiceImpl(final ProductRepository productRepository, final CategoryRepository categoryRepository) {
+    public ProductServiceImpl(final ProductRepository productRepository, final CategoryRepository categoryRepository, UserRepository userRepository) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -70,6 +72,11 @@ public class ProductServiceImpl implements ProductService {
                     .orElseThrow(() -> new ResourceNotFoundException("Category with the given ID does not exist")));
         }
 
+        if(productRequest.getUserId() != null) {
+            productEntity.setUserEntity(userRepository.findById(productRequest.getUserId())
+                    .orElseThrow(() -> new ResourceNotFoundException("User with the given ID does not exist")));
+        }
+
         return this.productRepository.save(productEntity).toDomainModel();
     }
 
@@ -88,6 +95,11 @@ public class ProductServiceImpl implements ProductService {
         if (productRequest.getCategoryId() != null) {
             existingProductEntity.setCategory(categoryRepository.findById(productRequest.getCategoryId())
                     .orElseThrow(() -> new ResourceNotFoundException("Category not found")));
+        }
+
+        if(productRequest.getUserId() != null) {
+            existingProductEntity.setUserEntity(userRepository.findById(productRequest.getUserId())
+                    .orElseThrow(() -> new ResourceNotFoundException("User with the given ID does not exist")));
         }
 
         return this.productRepository.save(existingProductEntity).toDomainModel();
@@ -125,4 +137,3 @@ public class ProductServiceImpl implements ProductService {
     }
 
 }
-

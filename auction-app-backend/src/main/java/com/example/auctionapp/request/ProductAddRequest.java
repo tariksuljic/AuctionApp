@@ -15,6 +15,7 @@ public class ProductAddRequest {
     private String status;
     private UUID categoryId;
     private List<String> imageUrls;
+    private UUID userId;
 
     public ProductAddRequest() {
     }
@@ -29,14 +30,11 @@ public class ProductAddRequest {
         productEntity.setEndDate(this.endDate);
         productEntity.setStatus(this.status);
 
-        // category id is set in services
-        // same as the logic for image associated with the products
-
         return productEntity;
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public void setName(final String name) {
@@ -44,7 +42,7 @@ public class ProductAddRequest {
     }
 
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     public void setDescription(final String description) {
@@ -52,7 +50,7 @@ public class ProductAddRequest {
     }
 
     public BigDecimal getStartPrice() {
-        return startPrice;
+        return this.startPrice;
     }
 
     public void setStartPrice(final BigDecimal startPrice) {
@@ -60,7 +58,7 @@ public class ProductAddRequest {
     }
 
     public LocalDateTime getStartDate() {
-        return startDate;
+        return this.startDate;
     }
 
     public void setStartDate(final LocalDateTime startDate) {
@@ -68,7 +66,7 @@ public class ProductAddRequest {
     }
 
     public LocalDateTime getEndDate() {
-        return endDate;
+        return this.endDate;
     }
 
     public void setEndDate(final LocalDateTime endDate) {
@@ -76,7 +74,7 @@ public class ProductAddRequest {
     }
 
     public String getStatus() {
-        return status;
+        return this.status;
     }
 
     public void setStatus(final String status) {
@@ -84,7 +82,7 @@ public class ProductAddRequest {
     }
 
     public UUID getCategoryId() {
-        return categoryId;
+        return this.categoryId;
     }
 
     public void setCategoryId(final UUID categoryId) {
@@ -92,10 +90,18 @@ public class ProductAddRequest {
     }
 
     public List<String> getImageUrls() {
-        return imageUrls;
+        return this.imageUrls;
     }
 
     public void setImageUrls(final List<String> imageUrls) {
         this.imageUrls = imageUrls;
+    }
+
+    public UUID getUserId() {
+        return this.userId;
+    }
+
+    public void setUserId(final UUID userId) {
+        this.userId = userId;
     }
 }

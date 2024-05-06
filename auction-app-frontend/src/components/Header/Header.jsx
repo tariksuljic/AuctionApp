@@ -4,12 +4,12 @@ import { SocialMediaIcons } from "src/components";
 
 import { ROUTE_PATHS } from "src/constants";
 import { logoutUser } from "src/services/userService";
-import { useUserName } from "src/store/UserNameContext";
+import { useUser } from "src/store/UserContext";
 
 import "./style.scss";
 
 const Header = () => {
-  const { userName, setUserName } = useUserName();
+  const { userName, setUserName } = useUser();
   const navigate = useNavigate();
 
   const onLogout = () => {
