@@ -23,6 +23,7 @@ import { BreadcrumbProvider } from "src/store/BreadcrumbContext";
 import { SuggestionProvider } from "src/store/SuggestionContext";
 import { WebSocketProvider } from "src/store/WebSocketContext";
 import { UserProvider } from "src/store/UserContext";
+import ProtectedRoutes from "src/utils/ProtectedRoutes";
 
 import { ROUTE_PATHS } from "src/constants";
 
@@ -43,7 +44,6 @@ const App = () => {
             <Routes>
               <Route path={ ROUTE_PATHS.HOME } element={ <Home /> } />
               <Route path={ ROUTE_PATHS.SHOP } element={ <Shop /> } />
-              <Route path={ ROUTE_PATHS.MY_ACCOUNT } element={ <MyAccount /> } />
               <Route path={ ROUTE_PATHS.ABOUT_US } element={ <AboutUs /> } />
               <Route
                 path={ ROUTE_PATHS.PRIVACY_POLICY }
@@ -54,7 +54,7 @@ const App = () => {
                 element={ <TermsAndConditions /> }
               />
               <Route
-                path={ `${ROUTE_PATHS.PRODUCT}/:id` }
+                path={ `${ ROUTE_PATHS.PRODUCT }/:id` }
                 element={ <ProductDetails /> }
               />
               <Route 
@@ -69,6 +69,9 @@ const App = () => {
                 path={ ROUTE_PATHS.REGISTER }
                 element={ <RegisterPage /> }
               />
+              <Route element={ <ProtectedRoutes /> }>
+                <Route path={ ROUTE_PATHS.MY_ACCOUNT } element={ <MyAccount /> } />
+              </Route>
             </Routes>
           </div>
           <Footer />

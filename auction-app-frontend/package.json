@@ -13,7 +13,6 @@
     "axios": "^1.6.8",
     "js-cookie": "^3.0.5",
     "jwt-decode": "^4.0.0",
-    "moment": "^2.30.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.51.3",
@@ -28,6 +27,8 @@
     "eslint-plugin-react": "^7.34.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
+    "moment": "^2.30.1",
+    "sass": "^1.77.0",
     "vite": "^5.1.6"
   }
 }

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 import { FormContainer } from "src/components";
@@ -15,6 +15,9 @@ const LoginForm = () => {
   const navigate = useNavigate();
   const { setUserName } = useUser();
 
+  const location = useLocation();
+  const { from } = location.state || { from: { pathname: "/" } };
+
   const [error, setError] = useState(null);
 
   const methods = useForm({
@@ -28,13 +31,18 @@ const LoginForm = () => {
 
         localStorage.setItem("accessToken", response.accessToken);
         
-        navigate(ROUTE_PATHS.HOME);
+        if (from.pathname) { // if user was redirected to login page, redirect back to the previous page
+          navigate(from.pathname);
+          return;
+        } else {
+          navigate(ROUTE_PATHS.HOME);
+        }
       }).catch((error) => {
         setError(error.response.data.message);
       });
   }
 
-  const errorMessage = error ? `${error}. Please enter your credentials again.` : null;
+  const errorMessage = error ? `${ error }. Please enter your credentials again.` : null;
 
   return (
     <div className="login-form-container">

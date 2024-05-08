@@ -15,4 +15,6 @@ public interface ProductRepository extends JpaRepository<ProductEntity, UUID>, J
 
     @Query("SELECT DISTINCT p.name FROM ProductEntity p")
     List<String> findAllProductNames();
+
+    Optional<ProductEntity> findProductEntityByProductId(final UUID productId);
 }

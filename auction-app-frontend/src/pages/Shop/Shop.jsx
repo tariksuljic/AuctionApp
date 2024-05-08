@@ -12,7 +12,7 @@ import {
 import { getProducts, getCategoriesWithSubcategories } from "src/services";
 import { useSuggestion } from "src/store/SuggestionContext";
 import { collapse, expand } from "src/assets/icons";
-import { SHOP_DEFAULT_PAGE_NUMBER } from "src/constants";
+import { SHOP_DEFAULT_PAGE_NUMBER, BUTTON_VARIANTS } from "src/constants";
 
 import "./style.scss";
 
@@ -121,7 +121,7 @@ const Shop = () => {
       queryParams.set("search_product", searchProduct);
     }
 
-    url += queryParams.toString() ? `?${queryParams.toString()}` : "";
+    url += queryParams.toString() ? `?${ queryParams.toString() }` : "";
 
     navigate(url);
   };
@@ -131,16 +131,16 @@ const Shop = () => {
 
   return (
     <>
-      <div className='shop-container'>
+      <div className="shop-container">
         { categoriesLoading ? (
           <LoadingComponent />
         ) : (
           <>
-            <div className='categories'>
-              <span className='body-regular'>PRODUCT CATEGORIES</span>
-              <div className='category-list body-regular'>
+            <div className="categories">
+              <span className="body-regular">PRODUCT CATEGORIES</span>
+              <div className="category-list body-regular">
                 { categories.map((category) => (
-                  <div key={ category.id } className='category-item body-regular'>
+                  <div key={ category.id } className="category-item body-regular">
                     <button
                       className={ `category-name ${
                         activeCategory === category.name ? "active" : ""
@@ -149,18 +149,18 @@ const Shop = () => {
                     >
                       { category.name }
                       { activeCategory === category.name ? (
-                        <img src={ collapse } alt='Collapse' />
+                        <img src={ collapse } alt="Collapse" />
                       ) : (
-                        <img src={ expand } alt='Expand' />
+                        <img src={ expand } alt="Expand" />
                       )}
                     </button>
                     { activeCategory === category.name &&
                       category.subCategories && (
-                        <div className='subcategory-list'>
+                        <div className="subcategory-list">
                           { category.subCategories.map((subcategory) => (
                             <Checkbox
                               key={ subcategory.id }
-                              label={ `${subcategory.name} (${subcategory.productCount})` }
+                              label={ `${ subcategory.name } (${ subcategory.productCount })` }
                               onChange={ (checked) =>
                                 handleCheckboxChange(subcategory.id, checked)
                               }
@@ -174,13 +174,13 @@ const Shop = () => {
             </div>
           </>
         ) }
-        <div className='product-list'>
+        <div className="product-list">
           <ProductGrid items={ items } />
           { hasMore && (
-            <div className='explore-btn'>
+            <div className="explore-btn">
               <Button
-                label='Explore More'
-                variant='filled'
+                label="Explore More"
+                variant={ BUTTON_VARIANTS.FILLED }
                 onButtonClick={ fetchNextPage }
               />
             </div>

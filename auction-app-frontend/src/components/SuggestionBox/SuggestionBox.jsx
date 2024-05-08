@@ -17,7 +17,7 @@ const SuggestionBox = () => {
 
     setSuggestion(null);
 
-    navigate(`/shop?${currentSearchParams.toString()}`);
+    navigate(`/shop?${ currentSearchParams.toString() }`);
   };
 
   return (

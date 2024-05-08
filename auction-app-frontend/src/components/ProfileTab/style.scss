@@ -1,0 +1,74 @@
+@import "src/scss/index.scss";
+
+.profile-tab-container {
+    @include flex-container(column, center, center);
+    gap: 64px;
+    width: 100%;
+
+    form {
+        width: 100%;
+
+        .general-information {
+            width: 100%;
+            border: 1px solid $neutral09;
+            margin-bottom: 32px;
+            overflow: auto;
+    
+            .general-information-header {
+                color: $neutral00;
+                border-bottom: 1px solid $neutral09;
+                padding: 16px 0px 16px 32px;
+
+                img {
+                    height: 16px;
+                    width: 16px;
+                    margin-right: 16px;
+                }
+            }
+    
+            .general-information-columns {
+                @include flex-container(row, space-between, center);
+                padding: 64px;
+
+                .general-information-column {
+                    @include flex-container(column, center, center);
+                    gap: 32px;
+    
+                    img {
+                        width: 360px;
+                        height: 360px;
+                        border-radius: 50%;
+                    }
+                }
+            }
+
+            .profile-form {
+                @include flex-container(row, flex-end, flex-end);
+                margin: 64px 0;
+                width: 100%;
+                flex-wrap: wrap;
+                gap: 20px;
+
+                .input-field {
+                    @include flex-container(column, flex-end, flex-end);
+                    flex-basis: 100%;
+                    position: relative;
+
+                    label, .error-message {
+                        width: 546px;
+                        text-align: left;
+                    }
+                }
+            }
+        }       
+    }
+
+    .collapsable-column {
+        padding: 0 64px;
+    }
+
+    button {
+        float: right;
+        padding: 16px 32px;
+    }
+}

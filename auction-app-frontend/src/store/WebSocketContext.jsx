@@ -24,7 +24,7 @@ export const WebSocketProvider = ({ children }) => {
   useEffect(() => {
     if (!userId) return undefined;
 
-    ws.current = new WebSocket(`${WEB_SOCKET_BASE_URL}?userId=${userId}`);
+    ws.current = new WebSocket(`${ WEB_SOCKET_BASE_URL }?userId=${ userId }`);
 
     ws.current.onopen = () => setConnectionStatus(CONNECTION_STATUSES.CONNECTED);
 

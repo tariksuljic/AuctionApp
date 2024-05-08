@@ -1,22 +1,33 @@
 import { useFormContext } from "react-hook-form";
 
-import "./style.scss"
+import { SelectField } from "src/components"; 
 
-const InputField = ({ name, label, type, rules, step }) => {
-    const { register, formState: { errors } } = useFormContext(); 
+import "./style.scss";
 
-    const inputProps = {
-        ...register(name, { ...rules }),
-        id: name,
-        type: type,
-        className: errors[name] ? "error" : "",
-        ...(step && { step })
+const InputField = ({ name, label, type, rules, step, options, className }) => {
+    const { register, formState: { errors } } = useFormContext();
+
+    const renderField = () => {
+        const inputProps = {
+            ...register(name, { ...rules }),
+            id: name,
+            type: type,
+            className: errors[name] ? "error" : "",
+            ...(step && { step }) 
+        };
+    
+        switch (type) {
+            case "select":
+                return <SelectField name={ name } options={ options } rules={ rules } />;
+            default:
+                return <input {...inputProps} />;
+        }
     };
 
     return (
-        <div className="input-field">
+        <div className={`${className} input-field`}>
             <label htmlFor={ name } className="body-semibold">{ label }</label>
-            <input { ...inputProps } />
+            { renderField() }
             { errors[name] && <span className="error-message body-small-regular">{ errors[name].message }</span> }
         </div>
     );

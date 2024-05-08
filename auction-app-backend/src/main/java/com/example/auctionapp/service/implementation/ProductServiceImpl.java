@@ -7,6 +7,7 @@ import com.example.auctionapp.model.Product;
 import com.example.auctionapp.exceptions.repository.ResourceNotFoundException;
 import com.example.auctionapp.repository.CategoryRepository;
 import com.example.auctionapp.repository.ProductRepository;
+import com.example.auctionapp.response.BidSummaryResponse;
 import com.example.auctionapp.response.ProductSearchResponse;
 import com.example.auctionapp.service.ProductService;
 import com.example.auctionapp.specification.ProductSpecification;
@@ -136,4 +137,11 @@ public class ProductServiceImpl implements ProductService {
         return randomProductEntity.toDomainModel();
     }
 
+    @Override
+    public BidSummaryResponse getBidSummary(final UUID productId) {
+        final ProductEntity productEntity = this.productRepository.findProductEntityByProductId(productId)
+                .orElseThrow(() -> new IllegalArgumentException("No bids found for the product."));
+
+        return new BidSummaryResponse(productEntity.getHighestBid(), productEntity.getBidsCount());
+    }
 }

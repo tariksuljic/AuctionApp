@@ -109,20 +109,20 @@ const Home = () => {
 
   return (
     <>
-      <div className='home-container'>
+      <div className="home-container">
         { initialDataLoading ? (
           <LoadingComponent />
         ) : (
-          <div className='home-upper'>
-            <div className='categories body-regular'>
-              <div className='categories-heading'>Categories</div>
+          <div className="home-upper">
+            <div className="categories body-regular">
+              <div className="categories-heading">Categories</div>
               <ul>
                 { categories.map((category) => (
                   <li key={ category.id }>
                     <Link
                       to={{
                         pathname: ROUTE_PATHS.SHOP,
-                        search: `?category=${category.id}`,
+                        search: `?category=${ category.id }`,
                       }}
                     >
                       { category.name }
@@ -134,21 +134,21 @@ const Home = () => {
                 </li>
               </ul>
             </div>
-            <div className='highlighted-product'>
-              <div className='product-container'>
-                <div className='product-info body-semibold'>
-                  <span className='product-name'>{ product.name }</span>
-                  <span className='product-price'>
+            <div className="highlighted-product">
+              <div className="product-container">
+                <div className="product-info body-semibold">
+                  <span className="product-name">{ product.name }</span>
+                  <span className="product-price">
                     Start From ${ product.startPrice }
                   </span>
-                  <span className='body-regular'>{ product.description }</span>
-                  <Link to={ `${ROUTE_PATHS.PRODUCT}/${product.id}` }>
-                    <Button label='BID NOW' iconSrc={ go } />
+                  <span className="body-regular">{ product.description }</span>
+                  <Link to={ `${ ROUTE_PATHS.PRODUCT }/${ product.id }` }>
+                    <Button label="BID NOW" iconSrc={ go } />
                   </Link>
                 </div>
               </div>
-              <Link to={ `${ROUTE_PATHS.PRODUCT}/${product.id}` }>
-                <div className='product-image'>
+              <Link to={ `${ ROUTE_PATHS.PRODUCT }/${ product.id }` }>
+                <div className="product-image">
                   <img
                     src={ product.productImages[0].imageUrl }
                     alt={ product.name }
@@ -158,7 +158,7 @@ const Home = () => {
             </div>
           </div>
         ) }
-        <div className='products'>
+        <div className="products">
           <Tabs
             tabs={ HOME_TABS }
             activeTab={ activeTab }

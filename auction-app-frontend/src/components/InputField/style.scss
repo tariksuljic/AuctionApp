@@ -2,6 +2,7 @@
 
 .input-field {
     @include flex-container(column, start, start);
+    position: relative;
     gap: 10px;
 
     input {
@@ -39,5 +40,44 @@
     .error-message { 
         color: $error;
         padding-bottom: 10px;
+    }
+
+}
+
+.input-field-half, .input-field-third {
+    flex-basis: auto !important;
+}
+
+.input-field-half {
+    input {
+        width: 260px !important;
+    }
+
+    label, .error-message {
+        width: 263px !important;
+        min-height: 24px !important;
+    }
+
+    .error-message {
+        position: absolute !important;
+        padding: 0  !important;
+        bottom: -30px !important;
+    }
+}
+
+.input-field-third {
+    input {
+        width: 171px !important;
+    }
+
+    label, .error-message {
+        width: 168px !important;
+        min-height: 24px !important;
+    }
+
+    .error-message {
+        position: absolute !important;
+        padding: 0 !important;
+        bottom: -30px !important;
     }
 }

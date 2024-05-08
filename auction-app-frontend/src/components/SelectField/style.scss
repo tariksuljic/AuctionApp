@@ -1,0 +1,26 @@
+@import "src/scss/index.scss";
+
+.custom-select {
+    div {
+        width: 262px;
+        height: 48px;
+    }
+
+    .dropdown-btn, .dropdown-item {
+        @include flex-container(row, space-between, center);
+        padding: 12px 24px;
+    }
+
+    .dropdown-btn {
+        border: 2px solid $neutral09;
+        margin-bottom: 5px;
+    }
+
+    .dropdown-item {
+        border: 1px solid $neutral09;
+
+        &:hover {
+            background-color: $neutral09;
+        }
+    }
+}

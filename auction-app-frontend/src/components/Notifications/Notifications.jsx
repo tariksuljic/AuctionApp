@@ -5,6 +5,7 @@ import { LoadingComponent, ErrorComponent } from "src/components";
 import { useUser } from "src/store/UserContext";
 import { useWebSocket } from "src/store/WebSocketContext";
 import { getLatestNotification } from "src/services/notificationService";
+import { HIGHEST_BID_MESSAGE, LOWER_BID_MESSAGE } from "src/constants";
 
 import "./style.scss";
 
@@ -60,11 +61,17 @@ const Notifications = ({ productId, fetchProductOnUpdate }) => {
   useEffect(() => {
     const handleNewMessage = (rawMessage) => {
       if (typeof rawMessage === "string") {
-        setNotification(rawMessage); // websocket returns a string message
-        fetchProductOnUpdate(); // refetch product details when a new message is received
+        const notificationType = rawMessage.includes(HIGHEST_BID_MESSAGE) ? "HIGHEST_BID" : "LOWER_BID";
+
+        const newNotification = {
+          messageContent: rawMessage,
+          notificationType: notificationType,
+        };
+        setNotification(newNotification);
+        
+        fetchProductOnUpdate(); // fetch product details when a new notification is received
       }
     };
-  
     addMessageListener(handleNewMessage);
   
     return () => {

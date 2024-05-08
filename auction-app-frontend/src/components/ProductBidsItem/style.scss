@@ -1,0 +1,39 @@
+@import "src/scss/index.scss";
+
+.product-bid-item {
+    @include flex-container(row, space-between, center);
+    padding: 16px 0;
+
+    img {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+    }
+
+    .item-title, 
+    .item-time-left, 
+    .item-your-price, 
+    .item-no-bids, 
+    .item-highest-bid, 
+    .item-image, 
+    .item-actions {
+        flex: 1;
+        text-align: center;
+    }
+
+    .highestBid {
+        color: $success; 
+    }
+
+    .lowerBid {
+        color: $info;
+    }
+
+    .item-actions {
+        @include flex-container(row, center, center);
+
+        button {
+            padding: 16px 32px;
+        }
+    }
+}

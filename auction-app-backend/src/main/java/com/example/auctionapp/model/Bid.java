@@ -9,7 +9,7 @@ public class Bid {
     private BigDecimal bidAmount;
     private LocalDateTime bidTime;
     private UUID userId;
-    private UUID productId;
+    private Product product;
 
     public Bid() {}
 
@@ -45,11 +45,11 @@ public class Bid {
         this.userId = userId;
     }
 
-    public UUID getProductId() {
-        return this.productId;
+    public Product getProduct() {
+        return this.product;
     }
 
-    public void setProductId(final UUID productId) {
-        this.productId = productId;
+    public void setProduct(final Product product) {
+        this.product = product;
     }
 }

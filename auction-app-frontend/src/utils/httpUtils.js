@@ -18,7 +18,7 @@ const isTokenExpired = (token) => {
 // to refresh access token
 const refreshToken = async () => {
   try {
-    const response = await axios.post(`${BASE_URL}/auth/refresh-token`, {}, { withCredentials: true });
+    const response = await axios.post(`${ BASE_URL }/auth/refresh-token`, {}, { withCredentials: true });
     const newAccessToken = response.data;
 
     localStorage.setItem("accessToken", newAccessToken); // to local storage
@@ -38,7 +38,7 @@ API.interceptors.request.use(async (config) => {
   }
 
   if (accessToken) {
-    config.headers["Authorization"] = `Bearer ${accessToken}`;
+    config.headers["Authorization"] = `Bearer ${ accessToken }`;
   } else {
     delete config.headers["Authorization"]; // remove invalid token
   }

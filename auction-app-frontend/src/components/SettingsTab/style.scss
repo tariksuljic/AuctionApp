@@ -1,0 +1,59 @@
+@import "src/scss/index.scss";
+
+.settings-tab-container {
+    width: 100%;
+
+    .box-container {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr; // 2 columns with equal width
+        grid-template-rows: auto auto; // 2 rows with auto height
+        gap: 24px;
+
+        .box {
+            @include flex-container(column, flex-start, flex-start);
+            gap: 32px;
+            border: 1px solid $neutral09;
+            padding: 32px;
+        
+            .top-left {
+                grid-row: 1;
+                grid-column: 1;
+
+            }
+            
+            .checkbox-container {
+                @include flex-container(column, flex-start, flex-start);
+                gap: 10px;
+
+                .checkbox-label {
+                    color: $neutral00;
+                }
+
+                .checkbox-custom {
+                    margin-right: 24px;
+                }
+            }
+
+            .top-right {
+                grid-row: 1;
+                grid-column: 2;
+            }
+
+            .box-information {
+                color: $primary;
+                font-weight: 500; 
+                margin-left: 24px;
+            }
+            
+            .bottom-left {
+                grid-column: 1 ;
+                grid-row: 2;
+
+                button {
+                    padding: 16px 32px;
+                }
+            }
+        }
+    }
+}

@@ -62,7 +62,7 @@ public class BidEntity {
         bid.setBidAmount(this.bidAmount);
         bid.setBidTime(this.bidTime);
         bid.setUserId(this.userEntity.getUserId());
-        bid.setProductId(this.productEntity.getProductId());
+        bid.setProduct(this.productEntity.toDomainModel());
 
         return bid;
     }

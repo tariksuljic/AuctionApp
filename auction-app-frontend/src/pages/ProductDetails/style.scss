@@ -97,18 +97,22 @@
       border: 1px solid $neutral09;
       gap: 16px;
 
-      .item-key {
-        font-size: 16px;
-        font-weight: 300;
-        line-height: 19.2px;
-      }
-
-      .item-value {
-        color: $primary;
-        font-size: 16px;
-        font-weight: 700;
-        line-height: 19.2px;
-        text-align: left;
+      .product-bid-details-item {
+        min-width: 140px;
+        
+        .item-key {
+          font-size: 16px;
+          font-weight: 300;
+          line-height: 19.2px;
+        }
+  
+        .item-value {
+          color: $primary;
+          font-size: 16px;
+          font-weight: 700;
+          line-height: 19.2px;
+          text-align: left;
+        }
       }
     }
 

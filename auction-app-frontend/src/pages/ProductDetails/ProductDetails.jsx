@@ -6,7 +6,7 @@ import { Tabs, LoadingComponent, ErrorComponent, FormContainer, Notifications } 
 
 import { useBreadcrumb } from "src/store/BreadcrumbContext";
 import { useUser } from "src/store/UserContext";
-import { getProduct } from "src/services";
+import { getProduct, getBidData } from "src/services";
 import { placeBid } from "src/services/bidService";
 import { calculateTimeLeft } from "src/utils/calculateTimeDifference";
 
@@ -30,6 +30,8 @@ const ProductDetails = () => {
   const [error, setError] = useState(null);
   const [timeLeft, setTimeLeft] = useState(0);
   const [additionalPlaceBidsFormFields, setAdditionalPlaceBidsFormFields] = useState([]);
+  const [bidDataLoading, setBidDataLoading] = useState(false);
+  const [bidDataError, setBidDataError] = useState(null);
 
   const { userType, userId } = useUser(); 
 
@@ -60,13 +62,33 @@ const ProductDetails = () => {
     }, 500);
   };
 
+  const fetchNewProductDetails = () => {
+    setBidDataLoading(true);
+
+    getBidData(id)
+      .then((bidData) => {
+        // append bid data to product
+        setProduct((prevProduct) => ({
+          ...prevProduct,
+          highestBid: bidData.highestBid,
+          bidsCount: bidData.bidsCount
+        }));
+      })
+      .catch((error) => {
+        setBidDataError(error.message);
+      })
+      .finally(() => {
+        setBidDataLoading(false);
+      });
+  };
+
   useEffect(() => {
     fetchInitialData();
   }, [id]);
 
   useEffect(() => {
     if (product) {
-      setTitle(`${product.name}`);
+      setTitle(`${ product.name }`);
       setAdditionalPlaceBidsFormFields(placeBidsFormFields(product.startPrice, product.highestBid));
       setTimeLeft(calculateTimeLeft(product.endDate));
     }
@@ -109,7 +131,7 @@ const ProductDetails = () => {
       });
 
     methods.reset();
-    fetchInitialData(); // fetch the updated product details
+    fetchNewProductDetails();
   };
 
   if (loading) return <LoadingComponent />;
@@ -117,7 +139,7 @@ const ProductDetails = () => {
 
   return (
     <>
-      <Notifications productId={ id } fetchProductOnUpdate={ fetchInitialData }/>
+      <Notifications productId={ id } fetchProductOnUpdate={ fetchNewProductDetails }/>
       <div className="product-details-container">
         <div className="product-details-images">
           <div className="main-image-container">
@@ -125,12 +147,12 @@ const ProductDetails = () => {
             <div className="other-images-container">
               { productImages.map((image, index) => (
                 <div
-                  key={ `${image.imageUrl}-${index}` }
+                  key={ `${ image.imageUrl }-${ index }` }
                   className="image-container"
                 >
                   <img
                     src={ image.imageUrl }
-                    alt={ `Product ${index + 1}` }
+                    alt={ `Product ${ index + 1 }` }
                     onClick={ () => handleImageClick(image) }
                   />
                 </div>
@@ -149,12 +171,26 @@ const ProductDetails = () => {
             <div className="product-bid-details-item">
               <span className="item-key">Highest Bid: </span>
               <span className="item-value">
-                ${ product.highestBid === null ? "0" : product.highestBid }
+                { bidDataLoading ? (
+                    <span className="body-regular">Loading...</span>
+                  ) : (
+                    <span className="body-bold">
+                      { product.highestBid === null ? "0" : `$${ product.highestBid }` }
+                    </span>
+                  ) }
               </span>
             </div>
             <div className="product-bid-details-item">
               <span className="item-key">Number of bids: </span>
-              <span className="item-value">{ product.bidsCount }</span>
+              <span className="item-value">
+                { bidDataLoading ? (
+                    <span className="body-regular">Loading...</span>
+                  ) : (
+                    <span className="body-bold">
+                      { product.bidsCount }
+                    </span>
+                  ) }
+              </span>
             </div>
             <div className="product-bid-details-item">
               <span className="item-key">Time left: </span>

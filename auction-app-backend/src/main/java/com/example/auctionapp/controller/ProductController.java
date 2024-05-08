@@ -1,6 +1,7 @@
 package com.example.auctionapp.controller;
 
 import com.example.auctionapp.model.Product;
+import com.example.auctionapp.response.BidSummaryResponse;
 import com.example.auctionapp.response.ProductSearchResponse;
 import com.example.auctionapp.service.ProductService;
 import com.example.auctionapp.request.ProductAddRequest;
@@ -74,5 +75,10 @@ public class ProductController {
     @GetMapping("/random")
     public Product getRandomProduct() {
         return this.productService.getRandomProduct();
+    }
+
+    @GetMapping("/{productId}/bid-details")
+    public BidSummaryResponse getBidSummary(@PathVariable final UUID productId) {
+        return this.productService.getBidSummary(productId);
     }
 }

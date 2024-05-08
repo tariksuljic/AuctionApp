@@ -17,7 +17,7 @@ const Searchbar = () => {
     const categoryId = url.searchParams.get("category");
   
     if (categoryId) {
-      baseUrl += `?category=${categoryId}`;
+      baseUrl += `?category=${ categoryId }`;
     }
 
     const searchParams = new URLSearchParams();

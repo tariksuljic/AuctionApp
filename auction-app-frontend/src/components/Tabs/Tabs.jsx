@@ -11,7 +11,7 @@ const Tabs = ({ tabs, activeTab, onTabClick }) => {
         <span
           key={ tab.id }
           onClick={ () => handleTabClick(tab.id) }
-          className={ `tab ${activeTab === tab.id ? "active" : "inactive"}` }
+          className={ `${ activeTab === tab.id ? "active" : "inactive" } tab` }
         >
           { tab.label }
         </span>

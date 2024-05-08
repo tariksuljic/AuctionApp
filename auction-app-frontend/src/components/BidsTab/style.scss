@@ -1,0 +1,15 @@
+@import "src/scss/index.scss";
+
+.bids-tab-container {
+    @include flex-container(column, center, center);
+    width: 100%;
+    gap: 10px;
+
+    .load-more-btn {
+        margin-top: 20px;
+        button {
+            width: 300px;
+            padding: 16px 0;
+        }
+    }
+}
