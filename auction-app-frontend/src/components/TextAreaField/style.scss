@@ -1,0 +1,21 @@
+@import "src/style/index.scss";
+
+.input-field {
+    @include flex-container(column, start, start);
+    position: relative;
+    gap: 10px;
+
+    textarea {
+        height: 200px;
+        width: 100%;
+        padding: 20px;
+        border: 1px solid $neutral09;
+        resize: none;
+        font-family: $font-family-lato;
+    }
+
+    .error-message { 
+        color: $error;
+        padding-bottom: 10px;
+    }
+}

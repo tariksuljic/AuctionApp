@@ -1,3 +1,5 @@
+import moment from "moment";
+
 export const rules = {
     required: (field) => ({
       required: `${field} is required`
@@ -31,6 +33,9 @@ export const rules = {
             value: pattern,
             message: message
         }
+    }),
+    minimumFiles: (minFiles) => ({
+        validate: (files) => files.length >= minFiles || `Add at least ${minFiles} files`
     }),
     email: () => ({
         ...rules.required("Email"),
@@ -105,7 +110,15 @@ export const rules = {
         ...rules.minValue(1930, "Year"),
         ...rules.maxValue(2024, "Year"),
         ...rules.pattern(/^[0-9]{2,4}$/, "Invalid year")
-    })
+    }),
+    startDate: () => ({
+        ...rules.required("Start date"),
+        validate: (value) => isDateInPast(value) || "Start date cannot be in the past"
+    }),
+    endDate: () => ({
+        ...rules.required("End date"),
+        validate: (value) => isDateInPast(value) || "End date cannot be in the past"
+    }),
 };
 
 const checkCardNumberValidity = (cardNo) => {
@@ -130,8 +143,11 @@ const checkCardNumberValidity = (cardNo) => {
 };
 
 const validateYear = (value) => {
-    const currentYear = new Date().getFullYear();
     const fullYear = parseInt("20" + value, 10);
 
-    return fullYear >= currentYear;
+    return moment().year() <= fullYear;
+};
+
+const isDateInPast = (dateString) => {
+    return !moment(dateString).startOf("day").isBefore(moment().startOf("day"));
 };

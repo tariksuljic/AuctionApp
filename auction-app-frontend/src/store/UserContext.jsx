@@ -11,6 +11,7 @@ export const UserProvider = ({ children }) => {
   const [userName, setUserName] = useState(() => {
     return localStorage.getItem("userName");
   });
+  const [email, setEmail] = useState("");
   const [userType, setUserType] = useState("");
   const [userId, setUserId] = useState("");
 
@@ -19,6 +20,7 @@ export const UserProvider = ({ children }) => {
       const decodedToken = getDecodedToken(token);
       setUserType(decodedToken?.role);
       setUserId(decodedToken?.id);
+      setEmail(decodedToken?.sub);
     } else {
       setUserType("");
       setUserId("");
@@ -34,7 +36,7 @@ export const UserProvider = ({ children }) => {
   }, [userName]);
 
   return (
-    <UserContext.Provider value={{ userName, setUserName, userType, userId }}>
+    <UserContext.Provider value={{ userName, setUserName, userType, userId, email }}>
       {children}
     </UserContext.Provider>
   );

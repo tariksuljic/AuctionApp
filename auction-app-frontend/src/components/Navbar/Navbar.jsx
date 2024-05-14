@@ -14,6 +14,8 @@ const Navbar = () => {
 
   const shouldHideOptions = (HIDE_NAV_OPTIONS_ON_PATHS.includes(location.pathname)) ? true : "";
 
+  const userToken = localStorage.getItem("accessToken");
+
   return (
     <>
       <div className={ `${ shouldHideOptions ? 'center-logo' : '' } navbar` }>
@@ -26,17 +28,21 @@ const Navbar = () => {
           <>
             <Searchbar />
             <div className="navbar-items body-regular">
-              { NAV_ITEMS.map((item) => (
-                <NavLink
-                  to={ item.link }
-                  className={ ({ isActive }) =>
-                    isActive ? "navbar-item active" : "navbar-item"
-                  }
-                  key={ item.key }
-                >
-                  { item.label }
-                </NavLink>
-              )) }
+              { NAV_ITEMS.map((item) => {
+                if (item.key === "my-account" && !userToken) {
+                  return null;
+                }
+                
+                return (
+                  <NavLink
+                    to={item.link}
+                    className={({ isActive }) => isActive ? "navbar-item active" : "navbar-item"}
+                    key={item.key}
+                  >
+                    {item.label}
+                  </NavLink>
+                );
+              })}
             </div>
           </>
         ) }

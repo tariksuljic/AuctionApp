@@ -1,11 +1,13 @@
 @import "src/scss/index.scss";
 
 .seller-tab-container {
-    @include flex-container(column, flex-start, flex-start);
+    @include flex-container(column, center, center);
     width: 100%;
     gap: 10px;
     
     .seller-tabs {
+        align-self: flex-start;
+        
         .tab {
             width: 96px;
             height: 40px;

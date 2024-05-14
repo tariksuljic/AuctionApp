@@ -95,33 +95,41 @@
       width: 263px;
       height: 137px;
       border: 1px solid $neutral09;
-      gap: 16px;
 
-      .product-bid-details-item {
-        min-width: 140px;
+      .product-bid-details-items {
+        @include flex-container(column, space-between, flex-start);
+        max-height: 89px;
+        min-width: 192px;
+        gap: 10px;
         
-        .item-key {
-          font-size: 16px;
-          font-weight: 300;
-          line-height: 19.2px;
-        }
-  
-        .item-value {
-          color: $primary;
-          font-size: 16px;
-          font-weight: 700;
-          line-height: 19.2px;
-          text-align: left;
+        .product-bid-details-item {
+          min-width: 140px;
+          
+          .item-key {
+            font-size: 16px;
+            font-weight: 300;
+            line-height: 19.2px;
+          }
+    
+          .item-value {
+            color: $primary;
+            font-size: 16px;
+            font-weight: 700;
+            line-height: 19.2px;
+            text-align: left;
+          }
         }
       }
+      
     }
 
     .place-bid-form {
       width: 100%;
 
       form {
-        @include flex-container(row, space-around, center);
+        @include flex-container(row, space-between, center);
         position: relative;
+        width: 100%;
         
         .input-field {
           gap: 0;

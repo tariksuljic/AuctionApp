@@ -1,7 +1,7 @@
 import { createContext, useState, useContext, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
-import { MY_ACCOUNT_TABS, ROUTES_MAP, HIDE_BREADCRUMBS_ON_PATHS, SEARCH_RESULTS } from "src/constants";
+import { MY_ACCOUNT_TABS, ROUTES_MAP, HIDE_BREADCRUMBS_ON_PATHS, SEARCH_RESULTS, ADD_ITEM_FORMS } from "src/constants";
 
 const BreadcrumbContext = createContext();
 
@@ -18,7 +18,8 @@ export const BreadcrumbProvider = ({ children }) => {
     const { pathname, search } = location;
 
     const hash = window.location.hash.replace("#", ""); // get the hash from the url
-    const tab = MY_ACCOUNT_TABS.find(tab => tab.id === hash); // check if the hash corresponds to a tab in my account page
+    const tab = MY_ACCOUNT_TABS.find(tab => tab.id === hash) 
+                || ADD_ITEM_FORMS.find(tab => tab.id === hash) ; // check if the hash corresponds to a tab these pages
 
     setHideBreadcrumbs(HIDE_BREADCRUMBS_ON_PATHS.includes(pathname)); // hide breadcrumbs if the current page is in list
 

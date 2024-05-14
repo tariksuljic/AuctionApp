@@ -7,7 +7,7 @@ import { calculateTimeLeft } from "src/utils/calculateTimeDifference";
 
 import "./style.scss";
 
-const ProductBidsTable = ({ emptyMessageComponent, items, buttonLabel, tabId }) => {
+const ProductBidsTable = ({ items, buttonLabel, tabId }) => {
   const navigate = useNavigate();
 
   const hasItems = items ? items.length > 0 : false;
@@ -30,15 +30,15 @@ const ProductBidsTable = ({ emptyMessageComponent, items, buttonLabel, tabId }) 
           { items.map(item => (
             <ProductBidsItem
               key={ item.id }
-              imgSrc={ item.product.productImages[0].imageUrl }
-              title={ item.product.name }
-              timeLeft={ calculateTimeLeft(item.product.endDate) }
+              imgSrc={ item.productImages[0].imageUrl }
+              title={ item.name }
+              timeLeft={ calculateTimeLeft(item.endDate) }
               bidPrice={ item.bidAmount }
-              noBids={ item.product.bidsCount }
-              highestBid={ item.product.highestBid }
+              noBids={ item.bidsCount }
+              highestBid={ item.highestBid ? item.highestBid : 0 }
               buttonLabel={ buttonLabel }
-              onButtonClick={ () => navigateToProduct(item.product.id) }
-              highestBidder={ item.bidAmount === item.product.highestBid }
+              onButtonClick={ () => navigateToProduct(item.id) }
+              highestBidder={ item.bidAmount === item.highestBid }
             />
           )) }
         </div>

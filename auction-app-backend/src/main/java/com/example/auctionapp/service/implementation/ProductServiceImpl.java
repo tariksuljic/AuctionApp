@@ -1,5 +1,12 @@
 package com.example.auctionapp.service.implementation;
 
+import com.example.auctionapp.entity.PaymentInfoEntity;
+import com.example.auctionapp.entity.ProductImageEntity;
+import com.example.auctionapp.entity.UserEntity;
+import com.example.auctionapp.entity.enums.ProductStatus;
+import com.example.auctionapp.external.AmazonClient;
+import com.example.auctionapp.repository.PaymentInfoRepository;
+import com.example.auctionapp.repository.ProductImageRepository;
 import com.example.auctionapp.repository.UserRepository;
 import com.example.auctionapp.request.ProductAddRequest;
 import com.example.auctionapp.entity.ProductEntity;
@@ -8,6 +15,7 @@ import com.example.auctionapp.exceptions.repository.ResourceNotFoundException;
 import com.example.auctionapp.repository.CategoryRepository;
 import com.example.auctionapp.repository.ProductRepository;
 import com.example.auctionapp.response.BidSummaryResponse;
+import com.example.auctionapp.response.ProductBidDetailsResponse;
 import com.example.auctionapp.response.ProductSearchResponse;
 import com.example.auctionapp.service.ProductService;
 import com.example.auctionapp.specification.ProductSpecification;
@@ -18,20 +26,35 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.UUID;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
+    private final PaymentInfoRepository paymentInfoRepository;
+    private final AmazonClient amazonClient;
+    private final ProductImageRepository productImageRepository;
 
-    public ProductServiceImpl(final ProductRepository productRepository, final CategoryRepository categoryRepository, UserRepository userRepository) {
+    public ProductServiceImpl(final ProductRepository productRepository,
+                              final CategoryRepository categoryRepository,
+                              final UserRepository userRepository,
+                              final PaymentInfoRepository paymentInfoRepository,
+                              final AmazonClient amazonClient,
+                              final ProductImageRepository productImageRepository) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
         this.userRepository = userRepository;
+        this.paymentInfoRepository = paymentInfoRepository;
+        this.amazonClient = amazonClient;
+        this.productImageRepository = productImageRepository;
     }
 
     @Override
@@ -64,21 +87,22 @@ public class ProductServiceImpl implements ProductService {
         return productEntity.toDomainModel();
     }
 
+    @Transactional
     @Override
-    public Product addProduct(final ProductAddRequest productRequest) {
-        final ProductEntity productEntity = productRequest.toEntity();
+    public Product addProduct(final ProductAddRequest productRequest, final List<MultipartFile> images) {
+        ProductEntity productEntity = productRequest.toEntity();
 
-        if (productRequest.getCategoryId() != null) {
-            productEntity.setCategory(categoryRepository.findById(productRequest.getCategoryId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Category with the given ID does not exist")));
-        }
+        final PaymentInfoEntity paymentInfoEntity = handlePaymentInfo(productRequest);
 
-        if(productRequest.getUserId() != null) {
-            productEntity.setUserEntity(userRepository.findById(productRequest.getUserId())
-                    .orElseThrow(() -> new ResourceNotFoundException("User with the given ID does not exist")));
-        }
+        productEntity.setPaymentInfo(paymentInfoEntity);
+        productEntity.setStatus(ProductStatus.ACTIVE);
 
-        return this.productRepository.save(productEntity).toDomainModel();
+        handleCategoryAndUser(productEntity, productRequest);
+
+        productEntity = productRepository.saveAndFlush(productEntity);
+        handleProductImages(productEntity, images);
+
+        return productRepository.save(productEntity).toDomainModel();
     }
 
     @Override
@@ -91,7 +115,7 @@ public class ProductServiceImpl implements ProductService {
         existingProductEntity.setStartPrice(productRequest.getStartPrice());
         existingProductEntity.setStartDate(productRequest.getStartDate());
         existingProductEntity.setEndDate(productRequest.getEndDate());
-        existingProductEntity.setStatus(productRequest.getStatus());
+        existingProductEntity.setStatus(ProductStatus.ACTIVE);
 
         if (productRequest.getCategoryId() != null) {
             existingProductEntity.setCategory(categoryRepository.findById(productRequest.getCategoryId())
@@ -126,7 +150,9 @@ public class ProductServiceImpl implements ProductService {
         Sort sort = Sort.by(direction, sortBy).and(Sort.by(Sort.Direction.ASC, "productId"));
         Pageable pageable = PageRequest.of(page, size, sort);
 
-        return productRepository.findAll(pageable).map(ProductEntity::toDomainModel);
+        return productRepository
+                .findProductEntitiesByStatusEquals(pageable, ProductStatus.ACTIVE)
+                .map(ProductEntity::toDomainModel);
     }
 
     @Override
@@ -143,5 +169,74 @@ public class ProductServiceImpl implements ProductService {
                 .orElseThrow(() -> new IllegalArgumentException("No bids found for the product."));
 
         return new BidSummaryResponse(productEntity.getHighestBid(), productEntity.getBidsCount());
+    }
+
+    @Override
+    public Page<ProductBidDetailsResponse> getProductByUserAndStatus(final UUID userId,
+                                                                     final ProductStatus productStatus,
+                                                                     final int page,
+                                                                     final int size) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        return this.productRepository
+                .findProductEntityByUserEntity_UserIdAndAndStatus(userId, productStatus, pageable)
+                .map(ProductBidDetailsResponse::new);
+    }
+
+    private PaymentInfoEntity handlePaymentInfo(ProductAddRequest productRequest) {
+        if (!productRequest.isDataChanged() && productRequest.getUserId() != null) {
+            final UserEntity user = userRepository.findById(productRequest.getUserId())
+                    .orElseThrow(() -> new ResourceNotFoundException("User with the given ID does not exist"));
+
+            return user.getPaymentInfo();
+        } else {
+            return createAndSavePaymentInfo(productRequest);
+        }
+    }
+
+    private PaymentInfoEntity createAndSavePaymentInfo(ProductAddRequest productRequest) {
+        PaymentInfoEntity paymentInfo = new PaymentInfoEntity();
+
+        paymentInfo.setAddress(productRequest.getAddress());
+        paymentInfo.setCity(productRequest.getCity());
+        paymentInfo.setZipCode(productRequest.getZipCode());
+        paymentInfo.setExpirationDate(productRequest.getExpirationDate());
+        paymentInfo.setCardNumber(productRequest.getCardNumber());
+        paymentInfo.setNameOnCard(productRequest.getNameOnCard());
+        paymentInfo.setCountry(productRequest.getCountry());
+
+        return paymentInfoRepository.save(paymentInfo);
+    }
+
+    private void handleCategoryAndUser(ProductEntity productEntity, ProductAddRequest productRequest) {
+        if (productRequest.getCategoryId() != null) {
+            productEntity.setCategory(categoryRepository.findById(productRequest.getCategoryId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Category with the given ID does not exist")));
+        }
+
+        if (productRequest.getUserId() != null) {
+            productEntity.setUserEntity(userRepository.findById(productRequest.getUserId())
+                    .orElseThrow(() -> new ResourceNotFoundException("User with the given ID does not exist")));
+        }
+    }
+
+    private void handleProductImages(ProductEntity productEntity, List<MultipartFile> images) {
+        final List<ProductImageEntity> imageEntities = images.stream().map(image -> {
+            try {
+                String imageUrl = amazonClient.uploadFile(image);
+                ProductImageEntity imageEntity = new ProductImageEntity();
+
+                imageEntity.setImageUrl(imageUrl);
+                imageEntity.setProductEntity(productEntity);
+
+                productImageRepository.save(imageEntity);
+
+                return imageEntity;
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to upload image", e);
+            }
+        }).collect(toList());
+
+        productEntity.setProductImages(imageEntities);
     }
 }

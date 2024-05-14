@@ -1,36 +1,38 @@
+import { useState } from "react";
 import { useFormContext } from "react-hook-form";
 
-import { SelectField } from "src/components"; 
+import { FIELD_TYPES } from "src/constants";
 
 import "./style.scss";
 
-const InputField = ({ name, label, type, rules, step, options, className }) => {
-    const { register, formState: { errors } } = useFormContext();
+const InputField = ({ name, label, type, rules, step, className, placeholder }) => {
+    const { register, setValue, formState: { errors } } = useFormContext();
 
-    const renderField = () => {
-        const inputProps = {
-            ...register(name, { ...rules }),
-            id: name,
-            type: type,
-            className: errors[name] ? "error" : "",
-            ...(step && { step }) 
-        };
-    
-        switch (type) {
-            case "select":
-                return <SelectField name={ name } options={ options } rules={ rules } />;
-            default:
-                return <input {...inputProps} />;
-        }
+    const [dateValue, setDateValue] = useState("");
+
+    const onChangeDate = (event) => {
+        setDateValue(event.target.value);
+        setValue(name, event.target.value);
+    };
+
+    const inputProps = {
+        ...register(name, { ...rules }),
+        id: name,
+        className: errors[name] ? "error" : "",
+        placeholder: placeholder || ""
     };
 
     return (
-        <div className={`${className} input-field`}>
+        <div className={ `${ className } input-field` }>
             <label htmlFor={ name } className="body-semibold">{ label }</label>
-            { renderField() }
+            { FIELD_TYPES.DATE === type ? (
+                <input { ...inputProps } type={ FIELD_TYPES.DATE } onChange={ onChangeDate } />
+            ) : (
+                <input { ...inputProps } type={ type } step={ FIELD_TYPES.NUMBER === type ? step : undefined } />
+            ) }
             { errors[name] && <span className="error-message body-small-regular">{ errors[name].message }</span> }
         </div>
     );
-}
+};
 
 export default InputField;

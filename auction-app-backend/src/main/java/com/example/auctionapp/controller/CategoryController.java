@@ -28,17 +28,12 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
-    @GetMapping
-    public List<Category> getCategories() {
-        return this.categoryService.getCategories();
-    }
-
     @GetMapping("/top-level")
     public List<Category> getTopLevelCategories() {
         return this.categoryService.getTopLevelCategories();
     }
 
-    @GetMapping("/with-subcategories")
+    @GetMapping
     public List<Category> getCategoriesWithSubcategories() {
         return this.categoryService.getCategoriesWithSubcategories();
     }
@@ -49,19 +44,19 @@ public class CategoryController {
         return this.categoryService.addCategory(category);
     }
 
-    @GetMapping(path = "/{id}")
+    @GetMapping("/{id}")
     public Category getCategoryById(@PathVariable final UUID id) {
         return this.categoryService.getCategoryById(id);
     }
 
     @PreAuthorize(SecurityRoles.ADMIN)
-    @PutMapping(path = "/{id}")
+    @PutMapping("/{id}")
     public Category updateCategory(@PathVariable final UUID id, @RequestBody final CategoryAddRequest category) {
         return this.categoryService.updateCategory(id, category);
     }
 
     @PreAuthorize(SecurityRoles.ADMIN)
-    @DeleteMapping(path = "/{id}")
+    @DeleteMapping("/{id}")
     public void deleteCategory(@PathVariable final UUID id) {
         this.categoryService.deleteCategory(id);
     }

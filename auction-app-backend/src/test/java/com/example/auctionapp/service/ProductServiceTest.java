@@ -4,6 +4,7 @@ import com.example.auctionapp.AuctionAppBackendApplication;
 import com.example.auctionapp.entity.ProductEntity;
 import com.example.auctionapp.entity.ProductImageEntity;
 import com.example.auctionapp.entity.CategoryEntity;
+import com.example.auctionapp.entity.enums.ProductStatus;
 import com.example.auctionapp.model.Product;
 import com.example.auctionapp.repository.ProductRepository;
 import org.junit.jupiter.api.Test;
@@ -49,7 +50,7 @@ public class ProductServiceTest {
         productEntity.setStartPrice(BigDecimal.valueOf(200));
         productEntity.setStartDate(LocalDateTime.now());
         productEntity.setEndDate(LocalDateTime.now().plusDays(1));
-        productEntity.setStatus("ACTIVE");
+        productEntity.setStatus(ProductStatus.ACTIVE);
         productEntity.setCategory(categoryEntity);
 
         ProductImageEntity productImage = new ProductImageEntity();

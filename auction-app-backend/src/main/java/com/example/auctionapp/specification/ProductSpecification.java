@@ -1,12 +1,12 @@
 package com.example.auctionapp.specification;
 
 import com.example.auctionapp.entity.ProductEntity;
+import com.example.auctionapp.entity.enums.ProductStatus;
 import org.springframework.data.jpa.domain.Specification;
 import jakarta.persistence.criteria.Predicate;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 public class ProductSpecification {
@@ -21,6 +21,8 @@ public class ProductSpecification {
             if (searchProduct != null && !searchProduct.isEmpty()) {
                 predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("name")), "%" + searchProduct.toLowerCase() + "%"));
             }
+
+            predicates.add(criteriaBuilder.equal(root.get("status"), ProductStatus.ACTIVE));
 
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };

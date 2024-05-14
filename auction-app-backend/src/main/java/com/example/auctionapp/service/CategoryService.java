@@ -2,7 +2,6 @@ package com.example.auctionapp.service;
 
 import com.example.auctionapp.model.Category;
 import com.example.auctionapp.request.CategoryAddRequest;
-import org.springframework.data.domain.Page;
 import java.util.List;
 import java.util.UUID;
 

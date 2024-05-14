@@ -2,10 +2,10 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
-import { FormContainer } from "src/components";
+import { FormContainer, ButtonLoadingIndicator } from "src/components";
 
 import { registerUser  } from "src/services";
-import { ROUTE_PATHS, BUTTON_LABELS } from "src/constants";
+import { ROUTE_PATHS, BUTTON_LABELS, SUCCESSFUL_REGISTRATION_MESSAGE } from "src/constants";
 import { registerFormFields } from "src/forms/fields";
 
 import "./style.scss";
@@ -14,6 +14,7 @@ const RegisterForm = () => {
   const navigate = useNavigate();
 
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const methods = useForm({
     mode: "onBlur"
@@ -22,13 +23,17 @@ const RegisterForm = () => {
   const onSubmit = (data) => {
     data = { ...data };
 
+    setLoading(true);
+
     registerUser(data)
       .then(() => {
         setError(null);
 
-        navigate(ROUTE_PATHS.LOGIN);
+        setLoading(false);
+        navigate(ROUTE_PATHS.LOGIN, { state: { message: SUCCESSFUL_REGISTRATION_MESSAGE } });
       })
       .catch((error) => {
+        setLoading(false);
         setError(error.response.data.message);
     });
   }
@@ -40,7 +45,7 @@ const RegisterForm = () => {
         <FormContainer 
           formFields={ registerFormFields } 
           onSubmit={ methods.handleSubmit(onSubmit) }
-          buttonLabel={ BUTTON_LABELS.REGISTER }
+          buttonLabel={ loading ? <ButtonLoadingIndicator /> : BUTTON_LABELS.LOGIN }
           methods={ methods }
           error= { error }
         />

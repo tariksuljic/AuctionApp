@@ -1,4 +1,5 @@
 import { getRequest } from "src/utils/httpUtils";
+import { postRequest } from "../utils/httpUtils";
 
 const getProductsByCriteria = (type, page, size) => {
   return getRequest(
@@ -30,4 +31,20 @@ const getBidData = (productId) => {
   return getRequest(`/products/${ productId }/bid-details`);
 };
 
-export { getProducts, getProduct, getProductRandom, getProductsByCriteria, getBidData };
+const addProduct = (formData) => {
+  return postRequest("/products", formData);
+};
+
+const findProductsByUserIdAndStatus = (userId, status, page, size) => {
+  return getRequest(`/products/user-products?userId=${ userId }&status=${ status }&page=${ page }&size=${ size }`);
+}
+
+export { 
+  getProducts, 
+  getProduct, 
+  getProductRandom, 
+  getProductsByCriteria, 
+  getBidData, 
+  addProduct,
+  findProductsByUserIdAndStatus
+};

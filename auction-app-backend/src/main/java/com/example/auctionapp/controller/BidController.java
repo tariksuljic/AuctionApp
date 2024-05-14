@@ -2,6 +2,7 @@ package com.example.auctionapp.controller;
 
 import com.example.auctionapp.model.Bid;
 import com.example.auctionapp.request.BidRequest;
+import com.example.auctionapp.response.ProductBidDetailsResponse;
 import com.example.auctionapp.service.BidService;
 import com.example.auctionapp.util.SecurityRoles;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -28,14 +29,14 @@ public class BidController {
     }
 
     @PreAuthorize(SecurityRoles.ALL)
-    @PostMapping(path = "/place-bid")
+    @PostMapping("/place-bid")
     public Bid placeBid(@RequestBody final BidRequest bidRequest) {
         return bidService.placeBid(bidRequest);
     }
 
     @PreAuthorize(SecurityRoles.ALL)
-    @GetMapping(path = "/{userId}")
-    public Page<Bid> getBidsForUser(
+    @GetMapping("/{userId}")
+    public Page<ProductBidDetailsResponse> getBidsForUser(
             @PathVariable final UUID userId,
             @RequestParam(value = "page", defaultValue = "0") final int page,
             @RequestParam(value = "size", defaultValue = "8") final int size

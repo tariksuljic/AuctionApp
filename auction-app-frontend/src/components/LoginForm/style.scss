@@ -3,8 +3,12 @@
 .login-form-container {
     @include flex-container(column, center, center);
     width: 738px;
-    padding: 0px 0px 64px 0px;
+    padding: 32px 0px 64px 0px;
     border: 1px solid $neutral09;
+
+    .alert-success {
+        color: $success;
+    }
 
     .login-form {
         @include flex-container(column, center, center);
@@ -23,6 +27,7 @@
 
         .form-title {
             color: $neutral00;
+            padding: 30px 0;
         }
 
         .input-field {

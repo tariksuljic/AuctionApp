@@ -1,5 +1,6 @@
 package com.example.auctionapp.controller;
 
+import com.example.auctionapp.entity.enums.ProductStatus;
 import com.example.auctionapp.model.Product;
 import com.example.auctionapp.service.ProductService;
 import org.junit.jupiter.api.Test;
@@ -38,7 +39,7 @@ public class ProductControllerTest {
         product.setStartPrice(BigDecimal.valueOf(200));
         product.setStartDate(LocalDateTime.now());
         product.setEndDate(LocalDateTime.now().plusDays(1));
-        product.setStatus("ACTIVE");
+        product.setStatus(ProductStatus.ACTIVE);
 
         Mockito.when(productService.getProductById(productId)).thenReturn(product);
 

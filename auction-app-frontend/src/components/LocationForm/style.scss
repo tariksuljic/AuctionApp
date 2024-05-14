@@ -1,0 +1,19 @@
+@import "src/scss/index.scss";
+
+.location-form {
+    width: 100%;
+
+    .button-container {
+        @include flex-container(row, space-between, center);
+        width: 100%;
+
+        .btn-navigation {
+            @include flex-container(row, center, center);
+            gap: 16px;
+        }
+
+        button {
+            width: 130px;
+        }
+    }
+}

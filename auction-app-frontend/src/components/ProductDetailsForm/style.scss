@@ -1,0 +1,23 @@
+@import "src/scss/index.scss";
+
+.details-form {
+    width: 100%;
+
+    .button-container {
+        @include flex-container(row, space-between, center);
+        gap: 16px;
+        width: 100%;
+
+        button {
+            width: 263px;
+        }
+    }
+
+    form {
+        width: 100%;
+        
+        .input-field {
+            width: 100%;
+        }
+    }
+}

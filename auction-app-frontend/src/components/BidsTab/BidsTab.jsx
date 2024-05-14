@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import { ProductBidsTable, LoadingComponent, ErrorComponent, Button } from "src/components";
+import { ProductBidsTable, ErrorComponent, Button } from "src/components";
 
 import { useUser } from "src/store/UserContext";
 import { findBidsByUserId } from "src/services/bidService";

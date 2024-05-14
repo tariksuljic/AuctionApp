@@ -53,6 +53,7 @@ export const ROUTE_PATHS = {
   PRODUCT: "/product",
   LOGIN: "/login",
   REGISTER: "/register",
+  ADD_ITEM: "/add-item",
 };
 
 export const HIDE_BREADCRUMBS_ON_PATHS = [
@@ -93,8 +94,12 @@ export const BUTTON_LABELS = {
   CHANGE_PHOTO: "Change photo",
   SAVE_INFO: "SAVE INFO",
   BID: "BID",
-  DEACTIVATE: "DEACTIVATE",
   LOAD_MORE: "LOAD MORE",
+  DEACTIVATE: "DEACTIVATE",
+  CANCEL: "CANCEL",
+  NEXT: "NEXT",
+  BACK: "BACK",
+  VIEW: "VIEW",
 };
 
 export const CONNECTION_STATUSES = {
@@ -124,13 +129,13 @@ export const MY_ACCOUNT_TABS = [
 ];
 
 export const HEADERS = [
-  { id: 'image', text: 'Item' },
-  { id: 'name', text: 'Name' },
-  { id: 'timeLeft', text: 'Time Left' },
-  { id: 'yourPrice', text: 'Your Price' },
-  { id: 'noBids', text: 'No. Bids' },
-  { id: 'highestBid', text: 'Highest Bid' },
-  { id: 'actions', text: '' }
+  { id: "item", text: "Item" },
+  { id: "name", text: "Name"},
+  { id: "timeLeft", text: "Time Left" },
+  { id: "yourPrice", text: "Your Price" },
+  { id: "noBids", text: "No. Bids" },
+  { id: "highestBid", text: "Highest Bid" },
+  { id: "actions", text: "" }
 ];
 
 export const SELLER_TABS = [
@@ -168,3 +173,33 @@ export const EMPTY_TABS = [
 
 export const HIGHEST_BID_MESSAGE = "Congratulations! You are the highest bidder.";
 export const LOWER_BID_MESSAGE = "There are higher bids than yours. You could give a second try.";
+
+export const ADD_ITEM_FORMS = [
+  { id: "details", label: "Details" },
+  { id: "prices", label: "Prices" },
+  { id: "shipping", label: "Shipping" },
+];
+
+export const ADD_ITEM_FORMS_MAP = {
+  DETAILS: "details",
+  PRICES: "prices",
+  SHIPPING: "shipping",
+};
+
+export const SUCCESSFUL_REGISTRATION_MESSAGE = "Registration successful, please login.";
+
+export const FILE_TYPES = ["JPG", "PNG", "GIF"];
+
+export const PRODUCT_STATUS = {
+  ACTIVE: "ACTIVE",
+  SOLD: "SOLD"
+};
+
+export const FIELD_TYPES = {
+  TEXT: "text",
+  TEXTAREA: "textarea",
+  SELECT: "select",
+  FILE: "file",
+  NUMBER: "number",
+  DATE: "date",
+};

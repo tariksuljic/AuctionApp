@@ -1,10 +1,8 @@
 @import "src/scss/index.scss";
 
 .custom-select {
-    div {
-        width: 262px;
-        height: 48px;
-    }
+    z-index: 1;
+    margin: 10px 0;
 
     .dropdown-btn, .dropdown-item {
         @include flex-container(row, space-between, center);
@@ -18,9 +16,15 @@
 
     .dropdown-item {
         border: 1px solid $neutral09;
+        background-color: $white;
 
         &:hover {
             background-color: $neutral09;
         }
     }
+    
+}
+
+.input-field-half {
+    flex-basis: auto !important;
 }

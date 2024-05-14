@@ -1,9 +1,12 @@
 package com.example.auctionapp.entity;
 
+import com.example.auctionapp.entity.enums.ProductStatus;
 import com.example.auctionapp.model.Product;
 import com.example.auctionapp.model.ProductImage;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -18,6 +21,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -50,7 +54,8 @@ public class ProductEntity {
     private LocalDateTime endDate;
 
     @Column(name = "status")
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private ProductStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
@@ -69,6 +74,10 @@ public class ProductEntity {
     @Formula("(SELECT MAX(b.bid_amount) FROM auction_app.bid b WHERE b.product_id = product_id)")
     private BigDecimal highestBid;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "payment_info_id")
+    private PaymentInfoEntity paymentInfo;
+
     public ProductEntity() {
     }
 
@@ -78,9 +87,10 @@ public class ProductEntity {
                          final BigDecimal startPrice,
                          final LocalDateTime startDate,
                          final LocalDateTime endDate,
-                         final String status,
+                         final ProductStatus status,
                          final CategoryEntity categoryEntity,
-                         final UserEntity userEntity) {
+                         final UserEntity userEntity,
+                         final PaymentInfoEntity paymentInfoEntity) {
         this.productId = productId;
         this.name = name;
         this.description = description;
@@ -90,6 +100,7 @@ public class ProductEntity {
         this.status = status;
         this.categoryEntity = categoryEntity;
         this.userEntity = userEntity;
+        this.paymentInfo = paymentInfoEntity;
     }
 
     public Product toDomainModel() {
@@ -103,10 +114,17 @@ public class ProductEntity {
         product.setEndDate(this.endDate);
         product.setStatus(this.status);
         product.setCategoryId(this.categoryEntity.getCategoryId());
-        List<ProductImage> productImageList = this.productImages.stream()
-                .map(ProductImageEntity::toDomainModel)
-                .collect(toList());
-        product.setProductImages(productImageList);
+
+        if (this.productImages != null) {
+            final List<ProductImage> productImageList = this.productImages.stream()
+                    .map(ProductImageEntity::toDomainModel)
+                    .collect(toList());
+            
+            product.setProductImages(productImageList);
+        } else {
+            product.setProductImages(new ArrayList<>());
+        }
+
         product.setUserId(this.userEntity.getUserId());
         product.setBidsCount(this.bidsCount);
         product.setHighestBid(this.highestBid);
@@ -162,11 +180,11 @@ public class ProductEntity {
         this.endDate = endDate;
     }
 
-    public String getStatus() {
+    public ProductStatus getStatus() {
         return this.status;
     }
 
-    public void setStatus(final String status) {
+    public void setStatus(final ProductStatus status) {
         this.status = status;
     }
 
@@ -216,5 +234,13 @@ public class ProductEntity {
 
     public void setHighestBid(final BigDecimal highestBid) {
         this.highestBid = highestBid;
+    }
+
+    public PaymentInfoEntity getPaymentInfo() {
+        return this.paymentInfo;
+    }
+
+    public void setPaymentInfo(final PaymentInfoEntity paymentInfo) {
+        this.paymentInfo = paymentInfo;
     }
 }

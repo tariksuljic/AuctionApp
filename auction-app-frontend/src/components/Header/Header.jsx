@@ -19,7 +19,7 @@ const Header = () => {
     localStorage.removeItem('accessToken');
     
     logoutUser();
-    navigate(ROUTE_PATHS.LOGIN);
+    navigate(ROUTE_PATHS.HOME);
   }
   
   return (

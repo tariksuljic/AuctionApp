@@ -1,5 +1,7 @@
 package com.example.auctionapp.model;
 
+import com.example.auctionapp.entity.enums.ProductStatus;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -12,7 +14,7 @@ public class Product {
     private BigDecimal startPrice;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    private String status;
+    private ProductStatus status;
     private UUID categoryId;
     List<ProductImage> productImages;
     private UUID userId;
@@ -70,11 +72,11 @@ public class Product {
         this.endDate = endDate;
     }
 
-    public String getStatus() {
+    public ProductStatus getStatus() {
         return this.status;
     }
 
-    public void setStatus(final String status) {
+    public void setStatus(final ProductStatus status) {
         this.status = status;
     }
 

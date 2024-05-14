@@ -6,8 +6,11 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.GrantedAuthority;
@@ -43,21 +46,26 @@ public class UserEntity implements UserDetails {
     @Enumerated(EnumType.STRING)
     private UserRoles role;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "payment_info_id")
+    private PaymentInfoEntity paymentInfoEntity;
+
     public UserEntity() {}
 
-    public UserEntity(UUID userId,
-                      String firstName,
-                      String lastName,
-                      String password,
-                      String email,
-                      UserRoles role
-    ) {
+    public UserEntity(final UUID userId,
+                      final String firstName,
+                      final String lastName,
+                      final String password,
+                      final String email,
+                      final UserRoles role,
+                      final PaymentInfoEntity paymentInfoEntity) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
         this.email = email;
         this.role = role;
+        this.paymentInfoEntity = paymentInfoEntity;
     }
 
     public User toDomainModel() {
@@ -148,5 +156,21 @@ public class UserEntity implements UserDetails {
 
     public void setRole(final UserRoles role) {
         this.role = role;
+    }
+
+    public PaymentInfoEntity getPaymentInfo() {
+        return this.paymentInfoEntity;
+    }
+
+    public void setPaymentInfo(final PaymentInfoEntity paymentInfoEntity) {
+        this.paymentInfoEntity = paymentInfoEntity;
+    }
+
+    public PaymentInfoEntity getPaymentInfoEntity() {
+        return this.paymentInfoEntity;
+    }
+
+    public void setPaymentInfoEntity(final PaymentInfoEntity paymentInfoEntity) {
+        this.paymentInfoEntity = paymentInfoEntity;
     }
 }

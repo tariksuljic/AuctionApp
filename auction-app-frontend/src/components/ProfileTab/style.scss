@@ -59,6 +59,17 @@
                         text-align: left;
                     }
                 }
+
+                .input-field-half {
+                    input {
+                        width: 260px;
+                    }
+                }
+                .input-field-third {
+                    input {
+                        width: 170px;
+                    }
+                }
             }
         }       
     }

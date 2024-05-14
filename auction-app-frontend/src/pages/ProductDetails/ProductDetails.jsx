@@ -90,6 +90,7 @@ const ProductDetails = () => {
     if (product) {
       setTitle(`${ product.name }`);
       setAdditionalPlaceBidsFormFields(placeBidsFormFields(product.startPrice, product.highestBid));
+      
       setTimeLeft(calculateTimeLeft(product.endDate));
     }
   }, [product, setTitle]);
@@ -168,33 +169,35 @@ const ProductDetails = () => {
             </span>
           </div>
           <div className="product-bid-details">
-            <div className="product-bid-details-item">
-              <span className="item-key">Highest Bid: </span>
-              <span className="item-value">
-                { bidDataLoading ? (
-                    <span className="body-regular">Loading...</span>
-                  ) : (
-                    <span className="body-bold">
-                      { product.highestBid === null ? "0" : `$${ product.highestBid }` }
-                    </span>
-                  ) }
-              </span>
-            </div>
-            <div className="product-bid-details-item">
-              <span className="item-key">Number of bids: </span>
-              <span className="item-value">
-                { bidDataLoading ? (
-                    <span className="body-regular">Loading...</span>
-                  ) : (
-                    <span className="body-bold">
-                      { product.bidsCount }
-                    </span>
-                  ) }
-              </span>
-            </div>
-            <div className="product-bid-details-item">
-              <span className="item-key">Time left: </span>
-              <span className="item-value">{ timeLeft }</span>
+            <div className="product-bid-details-items">
+              <div className="product-bid-details-item">
+                <span className="item-key">Highest Bid: </span>
+                <span className="item-value">
+                  { bidDataLoading ? (
+                      <span className="body-regular">Loading...</span>
+                    ) : (
+                      <span className="body-bold">
+                        { product.highestBid === null ? "0" : `$${ product.highestBid }` }
+                      </span>
+                    ) }
+                </span>
+              </div>
+              <div className="product-bid-details-item">
+                <span className="item-key">Number of bids: </span>
+                <span className="item-value">
+                  { bidDataLoading ? (
+                      <span className="body-regular">Loading...</span>
+                    ) : (
+                      <span className="body-bold">
+                        { product.bidsCount }
+                      </span>
+                    ) }
+                </span>
+              </div>
+              <div className="product-bid-details-item">
+                <span className="item-key">Time left: </span>
+                <span className="item-value">{ timeLeft }</span>
+              </div>
             </div>
           </div>
           { (AUCTION_STATUS.EXPIRED !== timeLeft && USER_TYPES.USER === userType && userId !== product.userId) && (

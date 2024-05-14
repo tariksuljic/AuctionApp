@@ -1,0 +1,94 @@
+@import "src/scss/index.scss";
+
+.add-item-form-container {
+    @include flex-container(column, center, center);
+    max-width: 738px;
+    border: 1px solid $neutral09;
+    margin: auto;
+    padding: 32px;
+
+    .form {
+        @include flex-container(column, center, center);
+        width: 548px;
+        margin-bottom: 32px;
+
+        .form-header {
+            margin-bottom: 64px;
+        }
+
+        .form-fields form {
+            @include flex-container(row, center, center);
+            width: 100%;
+            flex-wrap: wrap;
+
+            .input-field {
+                @include flex-container(column, flex-start, flex-start);
+                flex-basis: 100%;
+                margin-bottom: 24px;
+            }
+
+            .input-field-half {
+                margin: 0 5px 24px 5px;
+                max-width: 264px;
+
+                input {
+                    width: 100%;
+                }
+
+                .custom-select {
+                    width: 100%;
+                    max-height: 48px;
+                }
+            }
+
+            .input-field-half-date {
+                input {
+                    width: 251px;
+                }
+            }
+
+            .input-field-third {
+                margin: 0 7px 24px 7px;
+
+                input {
+                    width: 168px;
+                }
+            }
+
+            .button-container {
+                margin-top: 32px;
+            }
+        }
+    }
+}
+
+.form-navigation {
+    @include flex-container(row, center, center);
+    width: 224px;
+    gap: 10px;
+    margin: 50px auto;
+
+    .circles-container {
+        @include flex-container(row, space-between, center);
+        gap: 10px;
+
+        hr {
+            width: 50px;
+            border: 1px solid $neutral09;
+        }
+    }
+    
+    .circle {
+        min-width: 16px;
+        min-height: 16px;
+        border-radius: 50%;
+
+        &.active {
+            background-color: $primary;
+        }
+
+        &.inactive {
+            border: 1px solid $primary;
+        }
+    }
+}

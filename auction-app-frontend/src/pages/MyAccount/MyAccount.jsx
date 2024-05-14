@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 
 import { Button, ProfileTab, SellerTab, BidsTab, SettingsTab } from "src/components";
 
-import { MY_ACCOUNT_TABS, BUTTON_LABELS, BUTTON_VARIANTS, MY_ACCOUNT_TABS_MAP } from "src/constants";
+import { MY_ACCOUNT_TABS, BUTTON_LABELS, BUTTON_VARIANTS, MY_ACCOUNT_TABS_MAP, ROUTE_PATHS } from "src/constants";
 
 import "./style.scss";
 
@@ -66,7 +66,9 @@ const MyAccount = () => {
           )) }
         </div>
         <div className="add-item-button">
-            <Button label={ BUTTON_LABELS.ADD_ITEM } variant= { BUTTON_VARIANTS.FILLED }/>
+          <Link to={ ROUTE_PATHS.ADD_ITEM }>
+            <Button label={ BUTTON_LABELS.ADD_ITEM } variant= { BUTTON_VARIANTS.FILLED } />
+          </Link>
         </div>
       </div>
       <div>
