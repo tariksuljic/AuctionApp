@@ -11,9 +11,9 @@ import {
   cart
 } from "src/assets/icons";
 
-export const BASE_URL = "http://localhost:8080/api/v1";
+export const BASE_URL = import.meta.env.VITE_BASE_URL;
 
-export const WEB_SOCKET_BASE_URL = "ws://localhost:8080/websocket";
+export const WEB_SOCKET_BASE_URL = import.meta.env.VITE_WEB_SOCKET_BASE_URL;
 
 export const NAV_ITEMS = [
   {
