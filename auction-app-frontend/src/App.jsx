@@ -17,7 +17,7 @@ import {
   ProductDetails,
   LoginPage,
   RegisterPage,
-  AddItem
+  AddItem,
 } from "src/pages";
 
 import { BreadcrumbProvider } from "src/store/BreadcrumbContext";

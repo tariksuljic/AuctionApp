@@ -20,6 +20,7 @@ public class Product {
     private UUID userId;
     private int bidsCount;
     private BigDecimal highestBid;
+    private UUID highestBidderId;
 
     public Product() {
     }
@@ -118,5 +119,13 @@ public class Product {
 
     public void setHighestBid(final BigDecimal highestBid) {
         this.highestBid = highestBid;
+    }
+
+    public UUID getHighestBidderId() {
+        return this.highestBidderId;
+    }
+
+    public void setHighestBidderId(final UUID highestBidderId) {
+        this.highestBidderId = highestBidderId;
     }
 }

@@ -1,0 +1,11 @@
+@import "src/scss/index.scss";
+
+.checkout-container {
+    @include flex-container(column, center, center);
+    margin-top: 40px;
+    width: 100%;
+
+    .success-message {
+        color: $success;
+    }
+}

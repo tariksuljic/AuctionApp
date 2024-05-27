@@ -12,12 +12,12 @@ const logoutUser = () => {
     return getRequest("/auth/logout");
 }
 
-const getPaymentInfoByUser = (userId) => {
-    return getRequest(`/users/${userId}/payment-info`);
+const getUser = (userId) => {
+    return getRequest(`/users/${userId}`);
 }
 
 const addPaymentInfoToUser = (userId, data) => {
     return postRequest(`/users/${userId}/payment-info`, data);
 }
 
-export { registerUser, loginUser, logoutUser, getPaymentInfoByUser, addPaymentInfoToUser };
+export { registerUser, loginUser, logoutUser, getUser, addPaymentInfoToUser };

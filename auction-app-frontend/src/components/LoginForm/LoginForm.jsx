@@ -37,22 +37,21 @@ const LoginForm = () => {
 
     loginUser(data)
       .then((response) => {
-        setUserName(response.name);
+      setUserName(response.name);
+      
+      localStorage.setItem("accessToken", response.accessToken);
 
-        localStorage.setItem("accessToken", response.accessToken);
-        
-        if (from.pathname) { // if user was redirected to login page, redirect back to the previous page
-          navigate(from.pathname);
-          return;
-        } else {
-          navigate(ROUTE_PATHS.HOME);
-        }
+      setLoading(false);
 
-        setLoading(false);
-      }).catch((error) => {
-        setError(error.response.data.message);
-        setLoading(false);
-      });
+      if (from && from.pathname) { // if user was redirected to login page, redirect back to the previous page
+        navigate(from.pathname);
+      } else {
+        navigate(ROUTE_PATHS.HOME);
+      }
+    }).catch((error) => {
+      setError(error.response.data.message);
+      setLoading(false);
+    });
   }
 
   const errorMessage = error ? `${ error }. Please enter your credentials again.` : null;

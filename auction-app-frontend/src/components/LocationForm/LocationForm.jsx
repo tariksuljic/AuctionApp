@@ -1,20 +1,18 @@
 import { useEffect, useState } from "react";
-import { set, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
 import { FormContainer, LoadingComponent, ErrorComponent } from "src/components";
-
 import { locationShippingFormFields, cardInformationFields } from "src/forms/fields";
 import { BUTTON_LABELS, ROUTE_PATHS } from "src/constants";
-import { getPaymentInfoByUser } from "src/services";
+import { getUser } from "src/services";
 import { useUser } from "src/store/UserContext";
 
 import "./style.scss";
 
 const LocationForm = ({ formData, setFormData, handleFinalSubmit }) => {
     const navigate = useNavigate();
-
-    const { userId, email } = useUser(); 
+    const { userId, email } = useUser();
 
     const [originalPaymentInfo, setOriginalPaymentInfo] = useState(formData);
     const [showCardInfo, setShowCardInfo] = useState(false);
@@ -29,28 +27,35 @@ const LocationForm = ({ formData, setFormData, handleFinalSubmit }) => {
 
     const fetchPaymentInfo = () => {
         if (!userId) return;
-    
+
         setLoading(true);
-    
-        getPaymentInfoByUser(userId)
+
+        getUser(userId)
             .then((response) => {
-                const { expirationDate, ...rest } = response;
+                if (!response.paymentInfoEntity || !response.paymentInfoEntity.creditCardEntity) {
+                    setPaymentInfo({});
+
+                    methods.reset({ ...formData });
+                    return;
+                }
+
+                const { expirationDate, ...rest } = response.paymentInfoEntity.creditCardEntity;
                 const [year, month, day] = expirationDate.split('-');
-        
+
                 const expirationMonth = month;
                 const expirationYear = year.substring(2);
-        
+
                 const updatedPaymentInfo = {
+                    ...response.paymentInfoEntity,
                     ...rest,
                     expirationMonth,
                     expirationYear,
                     email
                 };
-    
+
                 setPaymentInfo(updatedPaymentInfo);
                 setOriginalPaymentInfo(updatedPaymentInfo); // for later use, to compare if shipping data has changed before submitting
                 setFormData({ ...formData, ...updatedPaymentInfo });
-    
                 methods.reset({ ...methods.getValues(), ...updatedPaymentInfo });
             }).catch((error) => {
                 if (error.response && error.response.status === 500) {
@@ -62,38 +67,31 @@ const LocationForm = ({ formData, setFormData, handleFinalSubmit }) => {
                 setLoading(false);
             });
     };
-    
+
     useEffect(() => {
         fetchPaymentInfo();
     }, [userId]);
 
     const hasDataChanged = () => {
         const currentData = methods.getValues();
-        
         // compare without CVV
         const currentDataWithoutCVV = {...currentData};
         const originalDataWithoutCVV = {...originalPaymentInfo};
         
         delete currentDataWithoutCVV.cvv;
         delete originalDataWithoutCVV.cvv;
-    
+
         return JSON.stringify(currentDataWithoutCVV) !== JSON.stringify(originalDataWithoutCVV);
     };
 
     const onSubmit = () => {
         const data = methods.getValues();
 
-        const modifiedData = {
-            ...data,
-            dataChanged: hasDataChanged()
-        };
-    
         if (!showCardInfo) {
-            setFormData({...formData, ...modifiedData});
+            setFormData({...formData, ...data, dataChanged: hasDataChanged()});
             setShowCardInfo(true);
         } else {
-            setFormData({...formData, ...modifiedData});
-            
+            setFormData({...formData, ...data, dataChanged: hasDataChanged()});
             handleFinalSubmit();
         }
     };
@@ -103,14 +101,9 @@ const LocationForm = ({ formData, setFormData, handleFinalSubmit }) => {
     };
 
     const onBack = () => {
-        const data = methods.getValues();
-
         if (showCardInfo) {
-            setFormData(data);
             setShowCardInfo(false);
         } else {
-            setFormData(data);
-
             navigate("#prices");
         }
     };
@@ -135,7 +128,7 @@ const LocationForm = ({ formData, setFormData, handleFinalSubmit }) => {
                     buttonLabel={ BUTTON_LABELS.NEXT }
                     cancelLabel={ BUTTON_LABELS.CANCEL }
                     backLabel={ BUTTON_LABELS.BACK }
-                    methods= { methods }
+                    methods={ methods }
                 />
             </div>
         </div>

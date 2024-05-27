@@ -16,7 +16,6 @@ public interface ProductService {
     ProductSearchResponse getProducts(final UUID categoryId, final String searchProduct, final int page, final int size);
     Product getProductById(final UUID id);
     Product addProduct(final ProductAddRequest productRequest, final List<MultipartFile> images);
-    Product updateProduct(final UUID id, final ProductAddRequest productRequest);
     void deleteProduct(final UUID id);
     Page<Product> getProductsByCriteria(final int page, final int size, final String type);
     Product getRandomProduct();

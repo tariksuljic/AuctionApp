@@ -19,6 +19,7 @@ import gavel from "./gavel.svg";
 import dropdown from "./drop-down.svg";
 import dropdownInactive from "./dropdown-inactive.svg";
 import dropdownActive from "./dropdown-active.svg";
+import close from "./close.svg";
 
 export { 
     facebook, 
@@ -41,5 +42,6 @@ export {
     gavel, 
     dropdown,
     dropdownInactive,
-    dropdownActive
+    dropdownActive, 
+    close
 };

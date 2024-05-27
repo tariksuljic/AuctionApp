@@ -15,6 +15,8 @@ export const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 export const WEB_SOCKET_BASE_URL = import.meta.env.VITE_WEB_SOCKET_BASE_URL;
 
+export const STRIPE_PUBLIC_KEY = import.meta.env.VITE_STRIPE_PUBLIC_KEY;
+
 export const NAV_ITEMS = [
   {
     label: "HOME",
@@ -40,6 +42,7 @@ export const ROUTES_MAP = {
   "/about-us": "About Us",
   "/privacy-policy": "Privacy Policy",
   "/terms-and-conditions": "Terms and Conditions",
+  "/checkout": "Checkout",
   // will add more routes
 };
 
@@ -54,6 +57,7 @@ export const ROUTE_PATHS = {
   LOGIN: "/login",
   REGISTER: "/register",
   ADD_ITEM: "/add-item",
+  CHECKOUT: "/checkout",
 };
 
 export const HIDE_BREADCRUMBS_ON_PATHS = [
@@ -100,6 +104,7 @@ export const BUTTON_LABELS = {
   NEXT: "NEXT",
   BACK: "BACK",
   VIEW: "VIEW",
+  PAY: "PAY",
 };
 
 export const CONNECTION_STATUSES = {
@@ -192,7 +197,8 @@ export const FILE_TYPES = ["JPG", "PNG", "GIF"];
 
 export const PRODUCT_STATUS = {
   ACTIVE: "ACTIVE",
-  SOLD: "SOLD"
+  SOLD: "SOLD",
+  INACTIVE: "INACTIVE",
 };
 
 export const FIELD_TYPES = {
@@ -202,4 +208,9 @@ export const FIELD_TYPES = {
   FILE: "file",
   NUMBER: "number",
   DATE: "date",
+};
+
+export const CHECKOUT_STEPS = {
+  ADDRESS: "address",
+  PAYMENT: "payment",
 };

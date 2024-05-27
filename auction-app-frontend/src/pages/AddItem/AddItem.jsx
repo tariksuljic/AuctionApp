@@ -7,8 +7,6 @@ import { ADD_ITEM_FORMS_MAP, ROUTE_PATHS } from "src/constants";
 import { addProduct } from "src/services";
 import { useUser } from "src/store/UserContext";
 
-import axios from 'axios';
-
 import "./style.scss";
 
 const AddItem = () => {

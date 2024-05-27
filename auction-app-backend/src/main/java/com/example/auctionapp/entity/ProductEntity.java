@@ -78,6 +78,11 @@ public class ProductEntity {
     @JoinColumn(name = "payment_info_id")
     private PaymentInfoEntity paymentInfo;
 
+    @Formula("(SELECT b.user_id FROM auction_app.bid b WHERE b.bid_amount " +
+            "= (SELECT MAX(b2.bid_amount) FROM auction_app.bid b2 WHERE b2.product_id = product_id) " +
+            "AND b.product_id = product_id LIMIT 1)")
+    private UUID highestBidderId;
+
     public ProductEntity() {
     }
 
@@ -128,6 +133,7 @@ public class ProductEntity {
         product.setUserId(this.userEntity.getUserId());
         product.setBidsCount(this.bidsCount);
         product.setHighestBid(this.highestBid);
+        product.setHighestBidderId(this.highestBidderId);
 
         return product;
     }
@@ -242,5 +248,13 @@ public class ProductEntity {
 
     public void setPaymentInfo(final PaymentInfoEntity paymentInfo) {
         this.paymentInfo = paymentInfo;
+    }
+
+    public UUID getHighestBidderId() {
+        return this.highestBidderId;
+    }
+
+    public void setHighestBidderId(final UUID highestBidderId) {
+        this.highestBidderId = highestBidderId;
     }
 }

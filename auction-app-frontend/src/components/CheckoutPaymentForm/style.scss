@@ -1,0 +1,54 @@
+@import "src/scss/index.scss";
+
+.form-container {
+    @include flex-container(column, center, center);
+    border: 1px solid $neutral09;
+    padding: 40px;
+    width: 100%;
+
+    .input-container {
+        input[type="text"] {
+            border: none;
+            font-size: 14px;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+        }
+    }
+
+    form {
+        width: 100%;
+
+        .input-container {
+            padding: 20px;
+            border: 1px solid $neutral09;
+            margin: 15px 0;
+            position: relative;;
+        }
+
+        .error-message {
+            color: $error;
+            font-size: 16px;
+        }
+    }
+
+    button {
+        margin-top: 30px;
+        width: 280px;
+        float: right;
+    }
+
+    .StripeElement--invalid {
+        color: $error;
+    }
+
+    .form-row {
+        @include flex-container(row, space-between, center);
+        width: 100%;
+        
+        .input-container {
+            width: 280px;
+        }
+    }
+}

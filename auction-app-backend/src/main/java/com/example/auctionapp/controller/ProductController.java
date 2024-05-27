@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -59,12 +57,6 @@ public class ProductController {
     @GetMapping( "/{id}")
     public Product getProductById(@PathVariable final UUID id) {
         return this.productService.getProductById(id);
-    }
-
-    @PreAuthorize(SecurityRoles.ALL)
-    @PutMapping( "/{id}")
-    public Product updateProduct(@PathVariable final UUID id, @RequestBody final ProductAddRequest product) {
-        return this.productService.updateProduct(id, product);
     }
 
     @PreAuthorize(SecurityRoles.ALL)

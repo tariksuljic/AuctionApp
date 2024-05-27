@@ -151,3 +151,9 @@ const validateYear = (value) => {
 const isDateInPast = (dateString) => {
     return !moment(dateString).startOf("day").isBefore(moment().startOf("day"));
 };
+
+export const validateCardholderName = (name) => {
+    if (!name) return "Name on card is required";
+    if (name.length < 3) return "Name on card must be at least 3 characters";
+    return "";
+};

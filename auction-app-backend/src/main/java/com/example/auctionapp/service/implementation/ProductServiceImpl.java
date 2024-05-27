@@ -1,13 +1,11 @@
 package com.example.auctionapp.service.implementation;
 
-import com.example.auctionapp.entity.PaymentInfoEntity;
 import com.example.auctionapp.entity.ProductImageEntity;
-import com.example.auctionapp.entity.UserEntity;
 import com.example.auctionapp.entity.enums.ProductStatus;
 import com.example.auctionapp.external.AmazonClient;
-import com.example.auctionapp.repository.PaymentInfoRepository;
 import com.example.auctionapp.repository.ProductImageRepository;
 import com.example.auctionapp.repository.UserRepository;
+import com.example.auctionapp.request.PaymentAddRequest;
 import com.example.auctionapp.request.ProductAddRequest;
 import com.example.auctionapp.entity.ProductEntity;
 import com.example.auctionapp.model.Product;
@@ -17,6 +15,7 @@ import com.example.auctionapp.repository.ProductRepository;
 import com.example.auctionapp.response.BidSummaryResponse;
 import com.example.auctionapp.response.ProductBidDetailsResponse;
 import com.example.auctionapp.response.ProductSearchResponse;
+import com.example.auctionapp.service.PaymentService;
 import com.example.auctionapp.service.ProductService;
 import com.example.auctionapp.specification.ProductSpecification;
 import com.example.auctionapp.util.ComputeSuggestion;
@@ -25,10 +24,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -39,20 +40,20 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
-    private final PaymentInfoRepository paymentInfoRepository;
+    private final PaymentService paymentService;
     private final AmazonClient amazonClient;
     private final ProductImageRepository productImageRepository;
 
     public ProductServiceImpl(final ProductRepository productRepository,
                               final CategoryRepository categoryRepository,
                               final UserRepository userRepository,
-                              final PaymentInfoRepository paymentInfoRepository,
                               final AmazonClient amazonClient,
-                              final ProductImageRepository productImageRepository) {
+                              final ProductImageRepository productImageRepository,
+                              final PaymentService paymentService) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
         this.userRepository = userRepository;
-        this.paymentInfoRepository = paymentInfoRepository;
+        this.paymentService = paymentService;
         this.amazonClient = amazonClient;
         this.productImageRepository = productImageRepository;
     }
@@ -89,45 +90,29 @@ public class ProductServiceImpl implements ProductService {
 
     @Transactional
     @Override
-    public Product addProduct(final ProductAddRequest productRequest, final List<MultipartFile> images) {
+    public Product addProduct(ProductAddRequest productRequest, List<MultipartFile> images) {
         ProductEntity productEntity = productRequest.toEntity();
 
-        final PaymentInfoEntity paymentInfoEntity = handlePaymentInfo(productRequest);
+        final PaymentAddRequest paymentAddRequest = new PaymentAddRequest(
+                productRequest.getAddress(),
+                productRequest.getCity(),
+                productRequest.getCountry(),
+                productRequest.getZipCode(),
+                productRequest.getNameOnCard(),
+                productRequest.getCardNumber(),
+                productRequest.getExpirationDate()
+        );
 
-        productEntity.setPaymentInfo(paymentInfoEntity);
+        productEntity.setPaymentInfo(paymentService.addNewPaymentInfo(paymentAddRequest).toEntity());
         productEntity.setStatus(ProductStatus.ACTIVE);
 
         handleCategoryAndUser(productEntity, productRequest);
 
         productEntity = productRepository.saveAndFlush(productEntity);
+
         handleProductImages(productEntity, images);
 
         return productRepository.save(productEntity).toDomainModel();
-    }
-
-    @Override
-    public Product updateProduct(final UUID id, final ProductAddRequest productRequest) {
-        final ProductEntity existingProductEntity = this.productRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Product with the given ID does not exist"));
-
-        existingProductEntity.setName(productRequest.getName());
-        existingProductEntity.setDescription(productRequest.getDescription());
-        existingProductEntity.setStartPrice(productRequest.getStartPrice());
-        existingProductEntity.setStartDate(productRequest.getStartDate());
-        existingProductEntity.setEndDate(productRequest.getEndDate());
-        existingProductEntity.setStatus(ProductStatus.ACTIVE);
-
-        if (productRequest.getCategoryId() != null) {
-            existingProductEntity.setCategory(categoryRepository.findById(productRequest.getCategoryId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Category not found")));
-        }
-
-        if(productRequest.getUserId() != null) {
-            existingProductEntity.setUserEntity(userRepository.findById(productRequest.getUserId())
-                    .orElseThrow(() -> new ResourceNotFoundException("User with the given ID does not exist")));
-        }
-
-        return this.productRepository.save(existingProductEntity).toDomainModel();
     }
 
     @Override
@@ -183,31 +168,6 @@ public class ProductServiceImpl implements ProductService {
                 .map(ProductBidDetailsResponse::new);
     }
 
-    private PaymentInfoEntity handlePaymentInfo(ProductAddRequest productRequest) {
-        if (!productRequest.isDataChanged() && productRequest.getUserId() != null) {
-            final UserEntity user = userRepository.findById(productRequest.getUserId())
-                    .orElseThrow(() -> new ResourceNotFoundException("User with the given ID does not exist"));
-
-            return user.getPaymentInfo();
-        } else {
-            return createAndSavePaymentInfo(productRequest);
-        }
-    }
-
-    private PaymentInfoEntity createAndSavePaymentInfo(ProductAddRequest productRequest) {
-        PaymentInfoEntity paymentInfo = new PaymentInfoEntity();
-
-        paymentInfo.setAddress(productRequest.getAddress());
-        paymentInfo.setCity(productRequest.getCity());
-        paymentInfo.setZipCode(productRequest.getZipCode());
-        paymentInfo.setExpirationDate(productRequest.getExpirationDate());
-        paymentInfo.setCardNumber(productRequest.getCardNumber());
-        paymentInfo.setNameOnCard(productRequest.getNameOnCard());
-        paymentInfo.setCountry(productRequest.getCountry());
-
-        return paymentInfoRepository.save(paymentInfo);
-    }
-
     private void handleCategoryAndUser(ProductEntity productEntity, ProductAddRequest productRequest) {
         if (productRequest.getCategoryId() != null) {
             productEntity.setCategory(categoryRepository.findById(productRequest.getCategoryId())
@@ -238,5 +198,17 @@ public class ProductServiceImpl implements ProductService {
         }).collect(toList());
 
         productEntity.setProductImages(imageEntities);
+    }
+
+    private PaymentAddRequest createPaymentAddRequest(ProductAddRequest productRequest) {
+        return new PaymentAddRequest(
+                productRequest.getAddress(),
+                productRequest.getCity(),
+                productRequest.getCountry(),
+                productRequest.getZipCode(),
+                productRequest.getNameOnCard(),
+                productRequest.getCardNumber(),
+                productRequest.getExpirationDate()
+        );
     }
 }
