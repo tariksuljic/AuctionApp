@@ -1,0 +1,45 @@
+services:
+  postgres:
+    build:
+      context: ./postgres/
+      dockerfile: Dockerfile
+    container_name: postgres
+    env_file:
+      ./postgres/postgres.env
+    ports:
+      - "5432:5432"
+    volumes:
+      - auction_app:/var/lib/postgresql/data
+    networks:
+      - auction-net
+
+  backend:
+    build:
+      context: ./auction-app-backend/
+      dockerfile: Dockerfile
+    container_name: backend
+    env_file:
+      ./auction-app-backend/.env
+    ports:
+      - "8080:8080"
+    networks:
+      - auction-net
+    depends_on:
+      - postgres
+
+  frontend:
+    build:
+      context: ./auction-app-frontend/
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - "80:80"
+    networks:
+      - auction-net
+    depends_on:
+      - backend
+
+networks:
+  auction-net:
+volumes:
+  auction_app:
