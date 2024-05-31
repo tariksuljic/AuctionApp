@@ -1,35 +1,37 @@
 import { useState, useEffect } from "react";
-
 import { useFormContext } from "react-hook-form";
 
 import { dropdown } from "src/assets/icons";
 
 import "./style.scss";
 
-const SelectField = ({ name, options = [], rules, label, onSelectChange, className }) => {
-    const { register, setValue, watch, formState: { errors } } = useFormContext();
+const SelectField = ({ name, options = [], rules, label, onSelectChange, className, useForm = true, defaultValue }) => {
+    const formContext = useForm ? useFormContext() : null;
+    const { register, setValue, watch, formState } = formContext || {};
 
     useEffect(() => {
-        register(name, rules);
-    }, [register, name, rules]);
-    
-    const currentValue = watch(name);
+        if (useForm) {
+            register(name, rules);
+        }
+    }, [register, name, rules, useForm]);
 
-    const [selected, setSelected] = useState(currentValue);
+    const currentValue = useForm ? watch(name) : undefined;
+    const [selected, setSelected] = useState(defaultValue || (useForm ? watch(name) : undefined));
     const [isOpen, setIsOpen] = useState(false);
 
     const toggleDropdown = () => setIsOpen(!isOpen);
 
     const handleSelect = (value) => {
         setSelected(value);
-        setValue(name, value, { shouldValidate: true });
+        if (useForm) {
+            setValue(name, value, { shouldValidate: true });
+        }
         setIsOpen(false);
-
         if (onSelectChange) {
             onSelectChange(value);
         }
     };
-    
+
     useEffect(() => {
         if (currentValue) setSelected(currentValue);
     }, [currentValue]);
@@ -53,7 +55,7 @@ const SelectField = ({ name, options = [], rules, label, onSelectChange, classNa
                     </div>
                 ) }
             </div>
-            { errors[name] && <span className="error-message body-small-regular">{ errors[name].message }</span> }
+            { useForm && errors[name] && <span className="error-message body-small-regular">{ errors[name].message }</span> }
         </div>
     );
 };

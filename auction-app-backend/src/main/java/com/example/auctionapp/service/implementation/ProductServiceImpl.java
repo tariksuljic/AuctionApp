@@ -5,6 +5,7 @@ import com.example.auctionapp.entity.enums.ProductStatus;
 import com.example.auctionapp.external.AmazonClient;
 import com.example.auctionapp.repository.ProductImageRepository;
 import com.example.auctionapp.repository.UserRepository;
+import com.example.auctionapp.request.GetProductRequest;
 import com.example.auctionapp.request.PaymentAddRequest;
 import com.example.auctionapp.request.ProductAddRequest;
 import com.example.auctionapp.entity.ProductEntity;
@@ -19,17 +20,15 @@ import com.example.auctionapp.service.PaymentService;
 import com.example.auctionapp.service.ProductService;
 import com.example.auctionapp.specification.ProductSpecification;
 import com.example.auctionapp.util.ComputeSuggestion;
+import com.example.auctionapp.util.PageableUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -59,20 +58,27 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductSearchResponse getProducts(UUID categoryId, String searchProduct, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        Specification<ProductEntity> specification = ProductSpecification.withDynamicQuery(categoryId, searchProduct);
+    public ProductSearchResponse getProducts(final GetProductRequest getProductRequest) {
+        final Pageable pageable = PageableUtil.createPageable(
+                getProductRequest.getPage(),
+                getProductRequest.getSize(),
+                getProductRequest.getSortField(),
+                getProductRequest.getSortDirection()
+        );
 
-        final Page<Product> products = productRepository.findAll(specification, pageable).map(ProductEntity::toDomainModel);
+        final Page<Product> products = productRepository.findAll(ProductSpecification.buildSpecification(getProductRequest), pageable)
+                                            .map(ProductEntity::toDomainModel);
+
         String suggestedQuery = null;
+        if (products.getTotalElements() < getProductRequest.getSize() &&
+                getProductRequest.getSearchProduct() != null &&
+                !getProductRequest.getSearchProduct().isBlank()) {
 
-        if (products.getTotalElements() < size && searchProduct != null && !searchProduct.isBlank()) {
-            final List<String> productNames = this.productRepository.findAllProductNames();
-            suggestedQuery = ComputeSuggestion.suggestCorrection(productNames, searchProduct);
+            final List<String> productNames = productRepository.findAllProductNames();
 
-            if (suggestedQuery != null && !suggestedQuery.equalsIgnoreCase(searchProduct)) {
-                suggestedQuery = suggestedQuery;
-            } else {
+            suggestedQuery = ComputeSuggestion.suggestCorrection(productNames, getProductRequest.getSearchProduct());
+
+            if (suggestedQuery == null || suggestedQuery.equalsIgnoreCase(getProductRequest.getSearchProduct())) {
                 suggestedQuery = null;
             }
         }
@@ -198,17 +204,5 @@ public class ProductServiceImpl implements ProductService {
         }).collect(toList());
 
         productEntity.setProductImages(imageEntities);
-    }
-
-    private PaymentAddRequest createPaymentAddRequest(ProductAddRequest productRequest) {
-        return new PaymentAddRequest(
-                productRequest.getAddress(),
-                productRequest.getCity(),
-                productRequest.getCountry(),
-                productRequest.getZipCode(),
-                productRequest.getNameOnCard(),
-                productRequest.getCardNumber(),
-                productRequest.getExpirationDate()
-        );
     }
 }

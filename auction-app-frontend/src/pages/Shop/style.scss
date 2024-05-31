@@ -85,4 +85,18 @@
       justify-content: center;
     }
   }
+
+  .product-options {
+    display: relative;
+    height: 50px;
+    margin-bottom: 24px;
+  }
+
+  .custom-select {
+    position: absolute;
+    top: -10px; 
+    left: 5px;
+    min-width: 268px;
+    max-height: 48px;
+  }
 }

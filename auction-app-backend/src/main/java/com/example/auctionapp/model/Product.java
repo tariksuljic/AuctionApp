@@ -25,6 +25,32 @@ public class Product {
     public Product() {
     }
 
+    public Product(final UUID id,
+                   final String name,
+                   final String description,
+                   final BigDecimal startPrice,
+                   final LocalDateTime startDate,
+                   final LocalDateTime endDate,
+                   final ProductStatus status,
+                   final UUID categoryId,
+                   final List<ProductImage> productImages,
+                   final UUID userId,
+                   final int bidsCount,
+                   final BigDecimal highestBid) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.startPrice = startPrice;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.status = status;
+        this.categoryId = categoryId;
+        this.productImages = productImages;
+        this.userId = userId;
+        this.bidsCount = bidsCount;
+        this.highestBid = highestBid;
+    }
+
     public UUID getId() {
         return this.id;
     }

@@ -2,6 +2,7 @@ package com.example.auctionapp.specification;
 
 import com.example.auctionapp.entity.ProductEntity;
 import com.example.auctionapp.entity.enums.ProductStatus;
+import com.example.auctionapp.request.GetProductRequest;
 import org.springframework.data.jpa.domain.Specification;
 import jakarta.persistence.criteria.Predicate;
 
@@ -26,5 +27,9 @@ public class ProductSpecification {
 
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
+    }
+
+    public static Specification<ProductEntity> buildSpecification(final GetProductRequest getProductRequest) {
+        return withDynamicQuery(getProductRequest.getCategoryId(), getProductRequest.getSearchProduct());
     }
 }
