@@ -20,8 +20,35 @@ public class Product {
     private UUID userId;
     private int bidsCount;
     private BigDecimal highestBid;
+    private UUID highestBidderId;
 
     public Product() {
+    }
+
+    public Product(final UUID id,
+                   final String name,
+                   final String description,
+                   final BigDecimal startPrice,
+                   final LocalDateTime startDate,
+                   final LocalDateTime endDate,
+                   final ProductStatus status,
+                   final UUID categoryId,
+                   final List<ProductImage> productImages,
+                   final UUID userId,
+                   final int bidsCount,
+                   final BigDecimal highestBid) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.startPrice = startPrice;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.status = status;
+        this.categoryId = categoryId;
+        this.productImages = productImages;
+        this.userId = userId;
+        this.bidsCount = bidsCount;
+        this.highestBid = highestBid;
     }
 
     public UUID getId() {
@@ -118,5 +145,13 @@ public class Product {
 
     public void setHighestBid(final BigDecimal highestBid) {
         this.highestBid = highestBid;
+    }
+
+    public UUID getHighestBidderId() {
+        return this.highestBidderId;
+    }
+
+    public void setHighestBidderId(final UUID highestBidderId) {
+        this.highestBidderId = highestBidderId;
     }
 }

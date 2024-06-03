@@ -120,7 +120,16 @@
           }
         }
       }
-      
+    }
+
+    .payment-info {
+      @include flex-container(row, space-between, center);
+      width: 100%;
+
+      button {
+        height: 50px;
+        padding: 0 40px;
+      }
     }
 
     .place-bid-form {
@@ -154,4 +163,27 @@
       }
     }
   }
+}
+
+.checkout-modal {
+  background-color: $white;
+  margin: 0 auto;
+  width: 664px;
+  position: relative;
+
+  img {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+  }
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.75); 
 }

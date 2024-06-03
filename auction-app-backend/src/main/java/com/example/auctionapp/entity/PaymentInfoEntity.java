@@ -1,16 +1,17 @@
 package com.example.auctionapp.entity;
 
 import com.example.auctionapp.model.PaymentInfo;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 import org.hibernate.annotations.GenericGenerator;
 
-import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
@@ -34,15 +35,9 @@ public class PaymentInfoEntity {
     @Column(name = "zip_code")
     private String zipCode;
 
-    @Column(name = "name_on_card")
-    private String nameOnCard;
-
-    @Column(name = "card_number")
-    private String cardNumber;
-
-    @Column(name = "expiration_date")
-    @Temporal(TemporalType.DATE)
-    private LocalDate expirationDate;
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "credit_card_id")
+    private CreditCardEntity creditCardEntity;
 
     public PaymentInfoEntity() {
 
@@ -55,10 +50,7 @@ public class PaymentInfoEntity {
         paymentInfo.setAddress(this.address);
         paymentInfo.setCity(this.city);
         paymentInfo.setCountry(this.country);
-        paymentInfo.setCardNumber(this.cardNumber);
         paymentInfo.setZipCode(this.zipCode);
-        paymentInfo.setNameOnCard(this.nameOnCard);
-        paymentInfo.setExpirationDate(this.expirationDate);
 
         return paymentInfo;
     }
@@ -103,27 +95,11 @@ public class PaymentInfoEntity {
         this.zipCode = zipCode;
     }
 
-    public String getNameOnCard() {
-        return this.nameOnCard;
+    public CreditCardEntity getCreditCardEntity() {
+        return this.creditCardEntity;
     }
 
-    public void setNameOnCard(final String nameOnCard) {
-        this.nameOnCard = nameOnCard;
-    }
-
-    public String getCardNumber() {
-        return this.cardNumber;
-    }
-
-    public void setCardNumber(final String cardNumber) {
-        this.cardNumber = cardNumber;
-    }
-
-    public LocalDate getExpirationDate() {
-        return this.expirationDate;
-    }
-
-    public void setExpirationDate(final LocalDate expirationDate) {
-        this.expirationDate = expirationDate;
+    public void setCreditCardEntity(final CreditCardEntity creditCardEntity) {
+        this.creditCardEntity = creditCardEntity;
     }
 }

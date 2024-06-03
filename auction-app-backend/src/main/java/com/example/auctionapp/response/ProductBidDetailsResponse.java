@@ -22,6 +22,7 @@ public class ProductBidDetailsResponse {
     private BigDecimal bidAmount;
     private int bidsCount;
     private BigDecimal highestBid;
+    private UUID highestBidderId;
 
     // constructor called by product service
     public ProductBidDetailsResponse(final ProductEntity productEntity) {
@@ -37,6 +38,7 @@ public class ProductBidDetailsResponse {
         this.bidAmount = productEntity.getStartPrice();
         this.bidsCount = productEntity.getBidsCount();
         this.highestBid = productEntity.getHighestBid();
+        this.highestBidderId = productEntity.getHighestBidderId();
     }
 
     // additional constructor for bid service
@@ -131,5 +133,13 @@ public class ProductBidDetailsResponse {
 
     public void setHighestBid(final BigDecimal highestBid) {
         this.highestBid = highestBid;
+    }
+
+    public UUID getHighestBidderId() {
+        return this.highestBidderId;
+    }
+
+    public void setHighestBidderId(final UUID highestBidderId) {
+        this.highestBidderId = highestBidderId;
     }
 }

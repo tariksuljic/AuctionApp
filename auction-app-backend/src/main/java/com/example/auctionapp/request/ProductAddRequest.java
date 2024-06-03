@@ -1,6 +1,7 @@
 package com.example.auctionapp.request;
 
 import com.example.auctionapp.entity.ProductEntity;
+import com.example.auctionapp.util.annotation.LuhnCheck;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.FutureOrPresent;
@@ -43,6 +44,8 @@ public class ProductAddRequest {
     @Size(min = 2, message = "Name on card must be at least 2 characters long")
     private String nameOnCard;
 
+    @LuhnCheck
+    @Size(min = 14, message = "Credit card number should be a valid 14-digit number")
     @NotEmpty(message = "Card number is required")
     private String cardNumber;
 

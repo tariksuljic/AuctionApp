@@ -1,13 +1,6 @@
 package com.example.auctionapp.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
-import org.hibernate.annotations.GenericGenerator;
-
-import java.time.LocalDate;
+import com.example.auctionapp.entity.PaymentInfoEntity;
 import java.util.UUID;
 
 public class PaymentInfo {
@@ -16,11 +9,19 @@ public class PaymentInfo {
     private String city;
     private String country;
     private String zipCode;
-    private String nameOnCard;
-    private String cardNumber;
-    private LocalDate expirationDate;
 
     public PaymentInfo() {
+    }
+
+    public PaymentInfoEntity toEntity() {
+        PaymentInfoEntity entity = new PaymentInfoEntity();
+
+        entity.setPaymentInfoId(this.paymentInfoId);
+        entity.setCity(this.city);
+        entity.setCountry(this.country);
+        entity.setZipCode(this.zipCode);
+
+        return entity;
     }
 
     public UUID getPaymentInfoId() {
@@ -61,29 +62,5 @@ public class PaymentInfo {
 
     public void setZipCode(final String zipCode) {
         this.zipCode = zipCode;
-    }
-
-    public String getNameOnCard() {
-        return this.nameOnCard;
-    }
-
-    public void setNameOnCard(final String nameOnCard) {
-        this.nameOnCard = nameOnCard;
-    }
-
-    public String getCardNumber() {
-        return this.cardNumber;
-    }
-
-    public void setCardNumber(final String cardNumber) {
-        this.cardNumber = cardNumber;
-    }
-
-    public LocalDate getExpirationDate() {
-        return this.expirationDate;
-    }
-
-    public void setExpirationDate(final LocalDate expirationDate) {
-        this.expirationDate = expirationDate;
     }
 }

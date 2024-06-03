@@ -1,5 +1,6 @@
 package com.example.auctionapp.model;
 
+import com.example.auctionapp.entity.PaymentInfoEntity;
 import com.example.auctionapp.entity.enums.UserRoles;
 
 import java.util.UUID;
@@ -10,6 +11,7 @@ public class User {
     private String lastName;
     private String email;
     private UserRoles role;
+    private PaymentInfoEntity paymentInfoEntity;
 
     public User() { }
 
@@ -51,5 +53,13 @@ public class User {
 
     public void setRole(final UserRoles role) {
         this.role = role;
+    }
+
+    public PaymentInfoEntity getPaymentInfoEntity() {
+        return this.paymentInfoEntity;
+    }
+
+    public void setPaymentInfoEntity(final PaymentInfoEntity paymentInfoEntity) {
+        this.paymentInfoEntity = paymentInfoEntity;
     }
 }

@@ -46,7 +46,7 @@ public class UserEntity implements UserDetails {
     @Enumerated(EnumType.STRING)
     private UserRoles role;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "payment_info_id")
     private PaymentInfoEntity paymentInfoEntity;
 
@@ -76,6 +76,7 @@ public class UserEntity implements UserDetails {
         user.setLastName(this.lastName);
         user.setEmail(this.email);
         user.setRole(this.role);
+        user.setPaymentInfoEntity(this.paymentInfoEntity);
 
         return user;
     }

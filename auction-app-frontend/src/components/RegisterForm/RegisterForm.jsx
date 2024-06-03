@@ -45,7 +45,7 @@ const RegisterForm = () => {
         <FormContainer 
           formFields={ registerFormFields } 
           onSubmit={ methods.handleSubmit(onSubmit) }
-          buttonLabel={ loading ? <ButtonLoadingIndicator /> : BUTTON_LABELS.LOGIN }
+          buttonLabel={ loading ? <ButtonLoadingIndicator /> : BUTTON_LABELS.REGISTER }
           methods={ methods }
           error= { error }
         />

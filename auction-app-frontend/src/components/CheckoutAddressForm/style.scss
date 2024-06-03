@@ -1,0 +1,45 @@
+@import "src/scss/index.scss";
+
+.address-form-container {
+    @include flex-container(column, center, center);
+    width: 100%;
+
+    form {
+        @include flex-container(row, center, center);
+        border: 1px solid $neutral09;
+        width: 100%;
+        padding: 40px;
+        flex-wrap: wrap;
+    
+        .input-field {
+            @include flex-container(column, flex-start, flex-start);
+            width: 100%;
+            flex-basis: 100%;
+            margin-bottom: 24px;
+
+            input {
+                width: 100%;
+            }
+        }
+    
+        .input-field-half {
+            margin: 0 5px 24px 5px;
+            max-width: 281px;
+
+            input {
+                width: 100%;
+            }
+        }
+    }
+
+    .button-container {
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
+
+        button {
+            margin-top: 20px;
+            width: 200px;
+        }
+    }
+}

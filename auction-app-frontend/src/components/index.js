@@ -31,3 +31,6 @@ export { default as LocationForm } from "./LocationForm/LocationForm";
 export { default as CustomFileUploader } from "./CustomFileUploader/CustomFileUploader";
 export { default as TextAreaField } from "./TextAreaField/TextAreaField";
 export { default as ButtonLoadingIndicator } from "./ButtonLoadingIndicator/ButtonLoadingIndicator";
+export { default as CheckoutComponent } from "./CheckoutComponent/CheckoutComponent";
+export { default as CheckoutPaymentForm } from "./CheckoutPaymentForm/CheckoutPaymentForm";
+export { default as CheckoutAddressForm } from "./CheckoutAddressForm/CheckoutAddressForm";

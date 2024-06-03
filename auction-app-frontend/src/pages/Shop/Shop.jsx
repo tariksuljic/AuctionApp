@@ -7,12 +7,13 @@ import {
   ProductGrid,
   ErrorComponent,
   LoadingComponent,
+  SelectField
 } from "src/components";
 
 import { getProducts, getCategoriesWithSubcategories } from "src/services";
 import { useSuggestion } from "src/store/SuggestionContext";
 import { collapse, expand } from "src/assets/icons";
-import { SHOP_DEFAULT_PAGE_NUMBER, BUTTON_VARIANTS } from "src/constants";
+import { SHOP_DEFAULT_PAGE_NUMBER, BUTTON_VARIANTS, SHOP_PAGE_SORTING } from "src/constants";
 
 import "./style.scss";
 
@@ -31,6 +32,8 @@ const Shop = () => {
   const [categoriesError, setCategoriesError] = useState(null);
   const [categoriesLoading, setCategoriesLoading] = useState(true);
   const [checked, setChecked] = useState({});
+  const [selectedSorting, setSelectedSorting] = useState(SHOP_PAGE_SORTING[0]);
+  const [sortingDirection, setSortingDirection] = useState(selectedSorting.direction);
 
   const { setSuggestion } = useSuggestion();
 
@@ -43,7 +46,7 @@ const Shop = () => {
   const fetchProducts = () => {
     setProductsLoading(true);
 
-    getProducts(page, SHOP_DEFAULT_PAGE_NUMBER, categoryId, searchProduct)
+    getProducts(page, SHOP_DEFAULT_PAGE_NUMBER, categoryId, searchProduct, selectedSorting.criteria, sortingDirection )
       .then((response) => {
         const { products, suggestion } = response;
 
@@ -89,7 +92,7 @@ const Shop = () => {
   // fetch products on page load
   useEffect(() => {
     fetchProducts();
-  }, [page, categoryId, searchProduct]);
+  }, [page, categoryId, searchProduct, selectedSorting, sortingDirection]);
 
   useEffect(() => {
     fetchCategories();
@@ -124,6 +127,11 @@ const Shop = () => {
     url += queryParams.toString() ? `?${ queryParams.toString() }` : "";
 
     navigate(url);
+  };
+
+  const handleSortingChange = (value) => {
+    setSelectedSorting(SHOP_PAGE_SORTING.find((sort) => sort.value === value));
+    setSortingDirection(SHOP_PAGE_SORTING.find((sort) => sort.value === value).direction);
   };
 
   if (productsError || categoriesError)
@@ -175,6 +183,17 @@ const Shop = () => {
           </>
         ) }
         <div className="product-list">
+          <div className="product-options">
+            <SelectField
+              name="sort"
+              options={ SHOP_PAGE_SORTING }
+              onSelectChange={ handleSortingChange }
+              label="Sort By"
+              className="sorting-select-field"
+              useForm={ false }
+              defaultValue={ selectedSorting.value }
+            />
+          </div>
           <ProductGrid items={ items } />
           { hasMore && (
             <div className="explore-btn">
