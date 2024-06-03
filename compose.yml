@@ -4,12 +4,12 @@ services:
       context: ./postgres/
       dockerfile: Dockerfile
     container_name: postgres
-    env_file:
-      ./postgres/postgres.env
     ports:
       - "5432:5432"
+    env_file:
+      - ./postgres/postgres.env
     volumes:
-      - auction_app:/var/lib/postgresql/data
+      - pg_data:/var/lib/postgresql/data
     networks:
       - auction-net
 
@@ -18,12 +18,16 @@ services:
       context: ./auction-app-backend/
       dockerfile: Dockerfile
     container_name: backend
-    env_file:
-      ./auction-app-backend/.env
     ports:
       - "8080:8080"
+    env_file:
+      - ./auction-app-backend/.env
     networks:
       - auction-net
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.backend.rule=(Host(`ec2-3-68-83-11.eu-central-1.compute.amazonaws.com`) && PathPrefix(`/api`))"
+      - "traefik.http.services.backend.loadbalancer.server.port=8080"
     depends_on:
       - postgres
 
@@ -33,13 +37,32 @@ services:
       dockerfile: Dockerfile
     container_name: frontend
     ports:
-      - "80:80"
+      - "83:80"
     networks:
       - auction-net
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.rule=Host(`ec2-3-68-83-11.eu-central-1.compute.amazonaws.com`)"
+      - "traefik.http.services.frontend.loadbalancer.server.port=80"
     depends_on:
       - backend
 
+  traefik:
+    image: "traefik:v2.9"
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker"
+      - "--entrypoints.web.address=:80"
+    container_name: traefik
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - auction-net
+
 networks:
   auction-net:
+
 volumes:
-  auction_app:
+  pg_data:
